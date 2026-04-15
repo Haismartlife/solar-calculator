@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar Project Estimation — GITT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#C8102E;--red-dark:#8B0B1F;--red-light:#FDEEF1;
+  --gold:#F5C518;--gold-dark:#B8910A;--gold-light:#FFFBEA;
+  --navy:#0D1B3E;--navy2:#1A2D5A;--navy-light:#EEF2F9;
+  --green:#1A7A3C;--green-light:#E8F5EE;--green-dark:#0F4D24;
+  --blue:#1557A0;--blue-light:#E8F0FB;--blue-dark:#0C3D72;
+  --amber-light:#FEF3CD;--amber-dark:#6B4800;
+  --bg:#F4F6FA;--surface:#FFFFFF;--surface2:#F0F3F9;
+  --border:rgba(13,27,62,0.1);--border2:rgba(13,27,62,0.18);
+  --text:#0D1B3E;--text2:#3D4F72;--text3:#7A8BAD;
+  --radius:8px;--radius-lg:14px;--radius-xl:20px;
+  --shadow:0 2px 8px rgba(13,27,62,.08);
+  --shadow-md:0 6px 20px rgba(13,27,62,.12);
+}
+body{font-family:"Be Vietnam Pro",sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh}
+.topbar{background:var(--navy);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-logo{width:38px;height:38px;border-radius:7px;overflow:hidden;background:#fff;padding:3px;flex-shrink:0}
+.topbar-logo img{width:100%;height:100%;object-fit:contain}
+.topbar-name{font-size:16px;font-weight:700;color:#fff}
+.topbar-sub{font-size:9px;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.badge-pro{background:var(--gold);color:var(--navy);font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px}
+.container{max-width:960px;margin:0 auto;padding:1.5rem 1.25rem 5rem}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:var(--radius-xl);padding:1.25rem 1.75rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.75rem;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-50px;top:-50px;width:200px;height:200px;border:36px solid rgba(245,197,24,.07);border-radius:50%;pointer-events:none}
+.hero-logo{width:66px;height:66px;border-radius:12px;background:#fff;padding:5px;flex-shrink:0}
+.hero-logo img{width:100%;height:100%;object-fit:contain}
+.hero h1{font-size:22px;font-weight:700;color:#fff}
+.hero p{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;line-height:1.6}
+.hero-stats{margin-left:auto;display:flex;gap:1.5rem;flex-shrink:0}
+.hs-n{font-size:22px;font-weight:700;color:var(--gold);text-align:center}
+.hs-u{font-size:9px;color:rgba(255,255,255,.5);text-align:center;text-transform:uppercase;letter-spacing:.05em}
+/* STEP BAR */
+.steps{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.step-btn{flex:1;padding:10px 4px;background:transparent;border:none;border-right:1px solid var(--border);cursor:pointer;font-family:inherit;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.step-btn:last-child{border-right:none}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);transition:all .15s}
+.step-lbl{font-size:11px;color:var(--text3);font-weight:500}
+.step-btn:hover{background:var(--navy-light)}
+.step-btn:hover .step-lbl{color:var(--navy)}
+.step-btn.active{background:var(--navy)}
+.step-btn.active .step-num{background:var(--red);color:#fff}
+.step-btn.active .step-lbl{color:#fff;font-weight:600}
+.step-btn.done .step-num{background:var(--green);color:#fff}
+.step-btn.done .step-lbl{color:var(--green)}
+/* PAGES */
+.pg{display:none}
+.pg.active{display:block}
+/* SECTIONS */
+.sec{margin-bottom:1.25rem;background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+.sec-hdr{background:var(--navy-light);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;align-items:center;gap:7px}
+.sec-hdr .ico{font-size:13px}
+.sec-hdr span{font-size:11px;font-weight:700;color:var(--navy2);text-transform:uppercase;letter-spacing:.07em}
+.sec-body{padding:1rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.fld{display:flex;flex-direction:column;gap:3px}
+.fld label{font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.02em}
+.fld input,.fld select{height:36px;padding:0 10px;border:1.5px solid var(--border2);border-radius:var(--radius);background:var(--surface);color:var(--text);font-size:13px;font-family:inherit;width:100%;outline:none;transition:border-color .15s}
+.fld input:focus,.fld select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,16,46,.08)}
+.with-unit{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:start}
+.unit-tag{height:36px;padding:0 10px;background:var(--navy-light);border:1.5px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;font-size:11px;color:var(--text3);white-space:nowrap;margin-top:18px;font-weight:500}
+.hint{font-size:10px;color:var(--text3);margin-top:2px;line-height:1.4}
+/* COST TABLE */
+.ctbl{width:100%;border-collapse:collapse}
+.ctbl thead tr{background:var(--navy-light)}
+.ctbl th{font-size:10px;font-weight:700;color:var(--navy2);text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;text-align:left;border-bottom:1.5px solid var(--border2)}
+.ctbl th:nth-child(2),.ctbl th:nth-child(3),.ctbl th:nth-child(4){text-align:right}
+.ctbl tbody tr{border-bottom:1px solid var(--border)}
+.ctbl tbody tr:last-child{border-bottom:none}
+.ctbl tbody tr:hover{background:rgba(13,27,62,.02)}
+.ctbl td{padding:7px 10px;vertical-align:middle}
+.ctbl td:nth-child(2),.ctbl td:nth-child(3){text-align:right}
+.ctbl td:nth-child(4){text-align:right;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--navy2);font-weight:500}
+.ctbl .nm{font-size:13px;font-weight:500;color:var(--text)}
+.ctbl .nm small{font-size:10px;color:var(--text3);font-weight:400;display:block}
+.ctbl input{height:32px;padding:0 8px;border:1.5px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-size:12px;font-family:"JetBrains Mono",monospace;width:100%;outline:none;text-align:right;transition:border-color .15s}
+.ctbl input:focus{border-color:var(--red)}
+.ctbl .qty{width:75px}
+.ctbl .price{width:130px}
+/* TOTALS */
+.tot{background:var(--navy);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-top:1rem}
+.tot-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:rgba(255,255,255,.65)}
+.tot-row span:last-child{font-family:"JetBrains Mono",monospace;color:rgba(255,255,255,.8)}
+.tot-row.main{font-size:15px;font-weight:700;color:#fff;border-top:1px solid rgba(255,255,255,.15);margin-top:7px;padding-top:10px}
+.tot-row.main span:last-child{color:var(--gold)}
+.tot-row.sub{font-size:11px;color:rgba(255,255,255,.4)}
+.tot-row.sub span:last-child{color:rgba(255,255,255,.4)}
+/* BUTTONS */
+.btn{width:100%;height:44px;border:none;border-radius:var(--radius-lg);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:1rem;transition:all .15s;letter-spacing:.02em}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red-dark);transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.btn-gold{background:var(--gold);color:var(--navy)}
+.btn-gold:hover{background:var(--gold-dark);color:#fff}
+.btn-sec{background:transparent;border:1.5px solid var(--border2);color:var(--text2)}
+.btn-sec:hover{background:var(--navy-light)}
+/* LOAN */
+.loan-box{background:var(--navy-light);border-radius:var(--radius-lg);padding:1rem;border:1.5px solid var(--border)}
+.loan-toggle{display:flex;align-items:center;gap:10px;margin-bottom:.75rem}
+.loan-toggle input[type=checkbox]{width:17px;height:17px;cursor:pointer;accent-color:var(--red)}
+.loan-toggle label{font-size:13px;font-weight:600;cursor:pointer;color:var(--navy)}
+.loan-fields{display:none}
+.loan-fields.open{display:grid}
+/* METRICS */
+.mtr-g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1rem}
+.mtr{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:.9rem;text-align:center;box-shadow:var(--shadow)}
+.mtr .v{font-size:19px;font-weight:700;font-family:"JetBrains Mono",monospace;color:var(--text)}
+.mtr .l{font-size:11px;color:var(--text2);margin-top:3px;font-weight:500}
+.mtr .s{font-size:10px;color:var(--text3);margin-top:1px}
+.mtr.hl{border-color:var(--gold);background:var(--gold-light)}.mtr.hl .v{color:var(--gold-dark)}
+.mtr.gr{border-color:#9FE1CB;background:var(--green-light)}.mtr.gr .v{color:var(--green-dark)}
+.mtr.bl{border-color:#B5D4F4;background:var(--blue-light)}.mtr.bl .v{color:var(--blue-dark)}
+.mtr.nv{border-color:var(--navy2);background:var(--navy-light)}.mtr.nv .v{color:var(--navy)}
+.mtr.rd{border-color:var(--red);background:var(--red-light)}.mtr.rd .v{color:var(--red-dark)}
+/* CHARTS */
+.cw{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem;margin-bottom:.9rem;box-shadow:var(--shadow)}
+.ct{font-size:12px;font-weight:600;color:var(--navy2);margin-bottom:.65rem;display:flex;align-items:center;gap:5px}
+.ct::before{content:"";width:3px;height:13px;background:var(--red);border-radius:2px;flex-shrink:0}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:.6rem;font-size:11px;color:var(--text2)}
+.legend span{display:flex;align-items:center;gap:4px}
+.dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+/* BK */
+.bk2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.9rem}
+.bkc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:.9rem;box-shadow:var(--shadow)}
+.bkc h3{font-size:10px;font-weight:700;color:var(--navy2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.65rem;padding-bottom:.4rem;border-bottom:2px solid var(--red)}
+.bkr{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px dashed var(--border)}
+.bkr:last-child{border-bottom:none;font-weight:600;padding-top:6px;margin-top:3px}
+.bkr span:last-child{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--navy2)}
+/* SENSITIVITY */
+.sr{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.sr:last-child{border-bottom:none}
+.sr label{font-size:12px;font-weight:500;color:var(--text2);width:200px;flex-shrink:0}
+.sr input[type=range]{flex:1;accent-color:var(--red)}
+.sr .sv{font-size:12px;font-family:"JetBrains Mono",monospace;width:76px;text-align:right;color:var(--navy);font-weight:600}
+/* TAGS */
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.tag-g{background:var(--green-light);color:var(--green-dark)}
+.tag-w{background:var(--amber-light);color:var(--amber-dark)}
+.tag-r{background:var(--red-light);color:var(--red-dark)}
+/* STRIPS */
+.co2-strip{display:flex;align-items:center;gap:12px;background:var(--green-light);border:1.5px solid #A8D8B9;border-radius:var(--radius-lg);padding:.85rem 1rem;margin-bottom:.9rem}
+.co2-strip .ico{font-size:18px;flex-shrink:0}
+.co2-strip .txt{font-size:13px;color:var(--green-dark);flex:1;font-weight:500}
+.co2-strip .val{font-size:13px;font-weight:700;color:var(--green-dark);white-space:nowrap;font-family:"JetBrains Mono",monospace}
+.warn-strip{background:var(--amber-light);border:1.5px solid #F5C518;border-radius:var(--radius-lg);padding:.85rem 1rem;margin-bottom:.9rem;font-size:12px;color:var(--amber-dark);line-height:1.7}
+.rating-box{background:var(--navy-light);border:1px solid var(--border);border-radius:var(--radius-lg);padding:.9rem 1rem;margin-top:.75rem}
+.rating-box h4{font-size:11px;font-weight:700;margin-bottom:5px;color:var(--navy2);text-transform:uppercase;letter-spacing:.06em}
+/* EXPORT ROW */
+.export-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
+.export-row .btn{margin-top:0;flex:1;min-width:130px;height:40px;font-size:13px}
+/* GLOSSARY */
+.glo-wrap{display:grid;grid-template-columns:250px 1fr;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface);box-shadow:var(--shadow);min-height:600px}
+.glo-side{background:var(--navy);overflow-y:auto}
+.glo-side-hdr{padding:.65rem .9rem;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid rgba(255,255,255,.08)}
+.glo-search-wrap{padding:.5rem .7rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.glo-search-wrap input{width:100%;height:30px;padding:0 9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#fff;font-size:12px;font-family:inherit;outline:none}
+.glo-search-wrap input::placeholder{color:rgba(255,255,255,.3)}
+.glo-search-wrap input:focus{border-color:var(--gold)}
+.glo-cat-hdr{padding:.35rem .7rem .15rem;font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;margin-top:.2rem}
+.glo-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem .9rem;cursor:pointer;font-size:12px;color:rgba(255,255,255,.65);transition:all .12s;border-left:3px solid transparent;gap:5px}
+.glo-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.glo-item.active{background:rgba(245,197,24,.12);border-left-color:var(--gold);color:var(--gold)}
+.glo-item .gsym{font-family:"JetBrains Mono",monospace;font-size:10px;color:rgba(255,255,255,.3);flex-shrink:0}
+.glo-item.active .gsym{color:var(--gold-dark)}
+.glo-main{display:flex;flex-direction:column;overflow:hidden}
+.glo-content{flex:1;overflow-y:auto;padding:1.1rem 1.3rem}
+.glo-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);text-align:center;gap:.6rem;padding:3rem}
+.glo-empty .eico{font-size:36px}
+.glo-term-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.9rem;padding-bottom:.65rem;border-bottom:2px solid var(--red)}
+.glo-term-title{font-size:18px;font-weight:700;color:var(--navy)}
+.glo-term-sym{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--navy-light);color:var(--navy2);padding:3px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.gsec{margin-bottom:1rem}
+.gsec h4{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;display:flex;align-items:center;gap:5px}
+.gsec h4::before{content:"";width:3px;height:11px;background:var(--red);border-radius:2px;flex-shrink:0}
+.gsec p{font-size:13px;color:var(--text2);line-height:1.65}
+.gformula{background:var(--navy-light);border:1px solid var(--border);border-radius:var(--radius);padding:.65rem .85rem;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--navy);line-height:1.8;white-space:pre-wrap;word-break:break-word}
+.gexample{background:var(--gold-light);border:1px solid #F5C518;border-radius:var(--radius);padding:.6rem .8rem;margin-top:.4rem;font-size:12px;color:var(--amber-dark);line-height:1.65}
+.gexample strong{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;color:var(--gold-dark)}
+.gimpact{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:.4rem}
+.gimp{background:var(--surface2);border-radius:var(--radius);padding:.55rem .75rem;font-size:12px}
+.gimp .dir{font-weight:700;font-size:11px}
+.dir-up{color:var(--green)}
+.dir-dn{color:var(--red)}
+.gimp .desc{color:var(--text2);margin-top:1px}
+.gtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:.4rem}
+.gtag{background:var(--navy-light);color:var(--navy2);font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+.gref{font-size:10px;color:var(--text3);margin-top:.3rem;font-style:italic}
+/* AI BAR */
+/* AI section removed */
+
+/* DESIGN PAGE */
+.dcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.1rem;box-shadow:var(--shadow)}
+.dcard-hdr{display:flex;align-items:center;gap:8px;margin-bottom:.75rem;padding-bottom:.6rem;border-bottom:2px solid var(--red)}
+.dcard-hdr .dico{font-size:20px}
+.dcard-hdr h3{font-size:13px;font-weight:700;color:var(--navy)}
+.dcard-hdr .dbadge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--navy-light);color:var(--navy2)}
+.drow{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px dashed var(--border);font-size:13px}
+.drow:last-child{border-bottom:none;font-weight:600;padding-top:8px;margin-top:4px}
+.drow .dk{color:var(--text2)}
+.drow .dv{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--navy);font-weight:500}
+.drow .dv strong{font-size:14px;color:var(--red-dark)}
+.dspec{background:var(--navy-light);border-radius:var(--radius);padding:.4rem .7rem;font-size:11px;color:var(--navy2);margin-top:3px}
+.design-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:1rem}
+.design-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+@media(max-width:640px){.design-grid{grid-template-columns:1fr}.design-grid-2{grid-template-columns:1fr}}
+
+.footer{text-align:center;margin-top:2.5rem;padding:1.25rem;background:var(--navy);border-radius:var(--radius-lg);font-size:11px;color:rgba(255,255,255,.4)}
+.footer strong{color:rgba(255,255,255,.7)}
+@media(max-width:640px){
+  .g2,.g3{grid-template-columns:1fr}
+  .mtr-g{grid-template-columns:1fr 1fr}
+  .bk2{grid-template-columns:1fr}
+  .glo-wrap{grid-template-columns:1fr;min-height:auto}
+  .glo-side{height:180px}
+  .steps{flex-wrap:wrap}
+  .step-btn{flex:1 1 30%}
+  .hero{flex-wrap:wrap;gap:1rem}
+  .hero-stats{margin-left:0}
+  .topbar{padding:0 1rem}
+}
+@media print{.topbar,.steps,.btn,.btn-red,.btn-gold,.btn-sec,.export-row{display:none}.pg{display:block!important}.container{padding:0}}
+</style>
+</head>
+<body>
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo"><img id="topLogo" src="" alt="GITT"></div>
+    <div>
+      <div class="topbar-name">Solar Project Estimation</div>
+      <div class="topbar-sub">GLOBAL INVESTMENT TECHNOLOGY TRANSFER COMPANY LIMITED</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span style="font-size:10px;color:rgba(255,255,255,.4)">v3.1</span>
+    <span class="badge-pro">PRO</span>
+  </div>
+</div>
+
+<div class="container">
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-logo"><img id="heroLogo" src="" alt="GITT"></div>
+  <div>
+    <h1>Solar Project Estimation</h1>
+    <p>Lập dự toán chuyên nghiệp: vật tư · nhân công · cấp phép · vốn vay<br>Net metering · Thuế · CO₂ · IRR / NPV / LCOE · Phân tích nhạy cảm</p>
+  </div>
+  <div class="hero-stats">
+    <div><div class="hs-n">26+</div><div class="hs-u">Chỉ số</div></div>
+    <div><div class="hs-n">25</div><div class="hs-u">Năm CF</div></div>
+    <div><div class="hs-n">IEC</div><div class="hs-u">Chuẩn</div></div>
+  </div>
+</div>
+
+<!-- STEPS -->
+<div class="steps">
+  <button class="step-btn active" id="s0" onclick="goTo(0)"><div class="step-num">1</div><span class="step-lbl">Dự án</span></button>
+  <button class="step-btn" id="s1" onclick="goTo(1)"><div class="step-num">2</div><span class="step-lbl">Chi phí</span></button>
+  <button class="step-btn" id="s2" onclick="goTo(2)"><div class="step-num">3</div><span class="step-lbl">Tài chính</span></button>
+  <button class="step-btn" id="s3" onclick="goTo(3)"><div class="step-num">4</div><span class="step-lbl">Kịch bản</span></button>
+  <button class="step-btn" id="s4" onclick="goTo(4)"><div class="step-num">5</div><span class="step-lbl">Kết quả</span></button>
+  <button class="step-btn" id="s5" onclick="goTo(5)"><div class="step-num">⚡</div><span class="step-lbl">Thiết kế</span></button>
+  <button class="step-btn" id="s6" onclick="goTo(6)"><div class="step-num">?</div><span class="step-lbl">Thuật ngữ</span></button>
+</div>
+
+<!-- PAGE 0: DỰ ÁN -->
+<div class="pg active" id="pg0">
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">⚙️</span><span>Thông tin hệ thống</span></div>
+    <div class="sec-body">
+      <div class="g3">
+        <div class="fld">
+          <label>Công suất lắp đặt</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="cap" value="10" min="0.5" max="5000" step="0.5"></div>
+            <span class="unit-tag">kWp</span>
+          </div>
+        </div>
+        <div class="fld">
+          <label>Loại hệ thống</label>
+          <select id="sysType" onchange="onSysType()">
+            <option value="ongrid">☀ Hòa lưới (On-Grid)</option>
+            <option value="hybrid">🔋 Hybrid (có Battery)</option>
+            <option value="offgrid">🏕 Độc lập (Off-Grid)</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Hướng lắp đặt</label>
+          <select id="orient">
+            <option value="1.00">↑ Nam — Tối ưu (100%)</option>
+            <option value="0.97">↗ Đông Nam / Tây Nam (97%)</option>
+            <option value="0.90">→ Đông / Tây (90%)</option>
+            <option value="0.80">↘ Đông Bắc / Tây Bắc (80%)</option>
+            <option value="0.70">↓ Bắc (70%)</option>
+          </select>
+        </div>
+      </div>
+      <div class="g3" style="margin-top:10px">
+        <div class="fld">
+          <label>Góc nghiêng tấm pin</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="tilt" value="15" min="0" max="90"></div>
+            <span class="unit-tag">độ</span>
+          </div>
+          <div class="hint">VN tối ưu 10–20° tùy vĩ độ (HCM≈15°, HN≈20°)</div>
+        </div>
+        <div class="fld">
+          <label>Giờ nắng đỉnh (PSH)</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="psh" value="4.5" min="1" max="7" step="0.1"></div>
+            <span class="unit-tag">h/ngày</span>
+          </div>
+          <div class="hint">HCM: 4.5–5.5 | HN: 3.5–4.5 | MT: 5.0–6.0</div>
+        </div>
+        <div class="fld">
+          <label>Performance Ratio (PR)</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="pr" value="80" min="60" max="95"></div>
+            <span class="unit-tag">%</span>
+          </div>
+          <div class="hint">Thực tế VN: 75–85%. Bao gồm nhiệt độ, bụi, dây dẫn.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">⚡</span><span>Điện năng & Doanh thu</span></div>
+    <div class="sec-body">
+      <div class="g3">
+        <div class="fld">
+          <label>Giá điện tiêu thụ</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="ep" value="2900" min="500" max="8000"></div>
+            <span class="unit-tag">đ/kWh</span>
+          </div>
+        </div>
+        <div class="fld">
+          <label>Tỷ lệ tự tiêu thụ</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="selfUse" value="70" min="0" max="100"></div>
+            <span class="unit-tag">%</span>
+          </div>
+          <div class="hint">Phần dùng trực tiếp; còn lại xuất lưới</div>
+        </div>
+        <div class="fld">
+          <label>Cơ chế bán điện thừa</label>
+          <select id="fitMode" onchange="onFitMode()">
+            <option value="netmeter">✅ Net Metering — Khuyến nghị</option>
+            <option value="fit">FIT (giá cố định) — Tạm dừng VN</option>
+            <option value="spot">Giá thị trường (spot)</option>
+            <option value="none">Không bán (tự tiêu/tích trữ)</option>
+          </select>
+        </div>
+      </div>
+      <div class="g3" style="margin-top:10px">
+        <div class="fld" id="fitPriceBox">
+          <label>Giá FIT / Spot (đ/kWh)</label>
+          <input type="number" id="fitP" value="1300" min="0" max="5000">
+          <div class="hint">Net metering: không cần điền ô này</div>
+        </div>
+        <div class="fld">
+          <label>Tăng giá điện / năm</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="esc" value="5" min="0" max="20" step="0.5"></div>
+            <span class="unit-tag">%/năm</span>
+          </div>
+          <div class="hint">Lịch sử VN 2010–2023: ~7%/năm</div>
+        </div>
+        <div class="fld">
+          <label>Suy giảm công suất</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="deg" value="0.7" min="0.1" max="3" step="0.1"></div>
+            <span class="unit-tag">%/năm</span>
+          </div>
+          <div class="hint">IEC 61215: ≤0.7%/năm cho mono PERC</div>
+        </div>
+      </div>
+      <div class="g3" style="margin-top:10px">
+        <div class="fld">
+          <label>Tuổi thọ dự án</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="lifespan" value="25" min="5" max="40"></div>
+            <span class="unit-tag">năm</span>
+          </div>
+        </div>
+        <div class="fld">
+          <label>Tỷ lệ chiết khấu (WACC)</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="discRate" value="8" min="1" max="30" step="0.5"></div>
+            <span class="unit-tag">%</span>
+          </div>
+          <div class="hint">Hộ GĐ: 6–8%; Doanh nghiệp: 10–15%</div>
+        </div>
+        <div class="fld">
+          <label>Thay inverter sau (0=không)</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="invRep" value="12" min="0" max="40"></div>
+            <span class="unit-tag">năm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-red" onclick="goTo(1)">Tiếp theo: Nhập chi phí →</button>
+</div>
+
+<!-- PAGE 1: CHI PHÍ -->
+<div class="pg" id="pg1">
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">🔧</span><span>Vật tư thiết bị chính</span></div>
+    <div class="sec-body" style="padding:0">
+      <table class="ctbl">
+        <thead><tr><th>Hạng mục</th><th>Số lượng</th><th>Đơn giá (VNĐ)</th><th>Thành tiền (VNĐ)</th></tr></thead>
+        <tbody>
+          <tr><td class="nm">Tấm pin Solar<small>tấm — ~400Wp/tấm</small></td>
+            <td class="qty"><input type="number" id="pQty" value="25" min="0" oninput="liveTotal()"></td>
+            <td class="price"><input type="number" id="pPrice" value="3500000" oninput="liveTotal()"></td>
+            <td id="sub_p">87.500.000</td></tr>
+          <tr><td class="nm">Inverter<small>bộ</small></td>
+            <td><input type="number" id="iQty" value="1" min="0" oninput="liveTotal()"></td>
+            <td><input type="number" id="iPrice" value="15000000" oninput="liveTotal()"></td>
+            <td id="sub_i">15.000.000</td></tr>
+          <tr><td class="nm">Pin lưu trữ (Battery)<small>kWh — 0 nếu On-Grid</small></td>
+            <td><input type="number" id="bQty" value="0" min="0" oninput="liveTotal()"></td>
+            <td><input type="number" id="bPrice" value="8000000" oninput="liveTotal()"></td>
+            <td id="sub_b">0</td></tr>
+          <tr><td class="nm">Dây cáp & phụ kiện<small>bộ</small></td>
+            <td><input type="number" id="cQty" value="1" min="0" oninput="liveTotal()"></td>
+            <td><input type="number" id="cPrice" value="5000000" oninput="liveTotal()"></td>
+            <td id="sub_c">5.000.000</td></tr>
+          <tr><td class="nm">Khung giá đỡ<small>bộ</small></td>
+            <td><input type="number" id="mQty" value="1" min="0" oninput="liveTotal()"></td>
+            <td><input type="number" id="mPrice" value="4000000" oninput="liveTotal()"></td>
+            <td id="sub_m">4.000.000</td></tr>
+          <tr><td class="nm">Tủ điện & thiết bị bảo vệ<small>bộ</small></td>
+            <td><input type="number" id="eQty" value="1" min="0" oninput="liveTotal()"></td>
+            <td><input type="number" id="ePrice" value="3000000" oninput="liveTotal()"></td>
+            <td id="sub_e">3.000.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="sec">
+      <div class="sec-hdr"><span class="ico">👷</span><span>Nhân công & Dịch vụ</span></div>
+      <div class="sec-body" style="padding:0">
+        <table class="ctbl">
+          <thead><tr><th>Hạng mục</th><th>SL</th><th>Đơn giá</th><th>Thành tiền</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Nhân công thi công<small>trọn gói</small></td>
+              <td><input type="number" id="lQty" value="1" oninput="liveTotal()"></td>
+              <td><input type="number" id="lPrice" value="10000000" oninput="liveTotal()"></td>
+              <td id="sub_l">10.000.000</td></tr>
+            <tr><td class="nm">Khảo sát & thiết kế<small>dự án</small></td>
+              <td><input type="number" id="dQty" value="1" oninput="liveTotal()"></td>
+              <td><input type="number" id="dPrice" value="3000000" oninput="liveTotal()"></td>
+              <td id="sub_d">3.000.000</td></tr>
+            <tr><td class="nm">Commissioning<small>lần</small></td>
+              <td><input type="number" id="cmQty" value="1" oninput="liveTotal()"></td>
+              <td><input type="number" id="cmPrice" value="2000000" oninput="liveTotal()"></td>
+              <td id="sub_cm">2.000.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-hdr"><span class="ico">📋</span><span>Cấp phép & Đấu nối</span></div>
+      <div class="sec-body" style="padding:0">
+        <table class="ctbl">
+          <thead><tr><th>Hạng mục</th><th>SL</th><th>Đơn giá</th><th>Thành tiền</th></tr></thead>
+          <tbody>
+            <tr><td class="nm">Đăng ký & cấp phép EVN<small>hồ sơ</small></td>
+              <td><input type="number" id="prQty" value="1" oninput="liveTotal()"></td>
+              <td><input type="number" id="prPrice" value="2000000" oninput="liveTotal()"></td>
+              <td id="sub_pr">2.000.000</td></tr>
+            <tr><td class="nm">Đấu nối & kiểm định lưới<small>lần</small></td>
+              <td><input type="number" id="cnQty" value="1" oninput="liveTotal()"></td>
+              <td><input type="number" id="cnPrice" value="3000000" oninput="liveTotal()"></td>
+              <td id="sub_cn">3.000.000</td></tr>
+            <tr><td class="nm">Bảo hiểm công trình<small>năm đầu</small></td>
+              <td><input type="number" id="inQty" value="1" oninput="liveTotal()"></td>
+              <td><input type="number" id="inPrice" value="1500000" oninput="liveTotal()"></td>
+              <td id="sub_in">1.500.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">🔄</span><span>Chi phí vận hành hàng năm (O&M)</span></div>
+    <div class="sec-body">
+      <div class="g3">
+        <div class="fld"><label>Bảo trì & vệ sinh (VNĐ/năm)</label><input type="number" id="maint" value="2000000" min="0" oninput="liveTotal()"></div>
+        <div class="fld"><label>Bảo hiểm hàng năm (VNĐ/năm)</label><input type="number" id="annIns" value="500000" min="0" oninput="liveTotal()"></div>
+        <div class="fld"><label>Trợ cấp / Ưu đãi (VNĐ)</label><input type="number" id="subsidy" value="0" min="0" oninput="liveTotal()"><div class="hint">Khấu trừ thẳng vào vốn đầu tư</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tot">
+    <div class="tot-row"><span>Vật tư thiết bị</span><span id="tMat">0 đ</span></div>
+    <div class="tot-row"><span>Nhân công & dịch vụ</span><span id="tLab">0 đ</span></div>
+    <div class="tot-row"><span>Cấp phép & đấu nối</span><span id="tPer">0 đ</span></div>
+    <div class="tot-row main"><span>TỔNG ĐẦU TƯ</span><span id="tTot">0 đ</span></div>
+    <div class="tot-row sub"><span>Chi phí/kWp</span><span id="tKwp">0 đ/kWp</span></div>
+    <div class="tot-row sub"><span>O&M hàng năm</span><span id="tOM">0 đ/năm</span></div>
+  </div>
+  <button class="btn btn-red" onclick="goTo(2)">Tiếp theo: Cơ cấu vốn →</button>
+</div>
+
+<!-- PAGE 2: TÀI CHÍNH -->
+<div class="pg" id="pg2">
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">🏦</span><span>Cơ cấu vốn</span></div>
+    <div class="sec-body">
+      <div class="loan-box">
+        <div class="loan-toggle">
+          <input type="checkbox" id="useLoan" onchange="onLoan()">
+          <label for="useLoan">Sử dụng vốn vay ngân hàng (đòn bẩy tài chính)</label>
+        </div>
+        <div class="loan-fields g3" id="loanFields">
+          <div class="fld">
+            <label>Tỷ lệ vay vốn</label>
+            <div class="with-unit">
+              <div class="fld" style="gap:0"><input type="number" id="loanRatio" value="70" min="0" max="100"></div>
+              <span class="unit-tag">%</span>
+            </div>
+            <div class="hint">Phần còn lại là vốn tự có</div>
+          </div>
+          <div class="fld">
+            <label>Lãi suất vay</label>
+            <div class="with-unit">
+              <div class="fld" style="gap:0"><input type="number" id="loanRate" value="9" min="1" max="30" step="0.5"></div>
+              <span class="unit-tag">%/năm</span>
+            </div>
+          </div>
+          <div class="fld">
+            <label>Kỳ hạn vay</label>
+            <div class="with-unit">
+              <div class="fld" style="gap:0"><input type="number" id="loanTerm" value="7" min="1" max="25"></div>
+              <span class="unit-tag">năm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">📊</span><span>Khấu hao & Thuế</span></div>
+    <div class="sec-body">
+      <div class="g3">
+        <div class="fld">
+          <label>Khấu hao tuyến tính</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="deprYr" value="10" min="1" max="25"></div>
+            <span class="unit-tag">năm</span>
+          </div>
+          <div class="hint">TT 45/2013: thiết bị điện 7–10 năm</div>
+        </div>
+        <div class="fld">
+          <label>Thuế CIT doanh nghiệp</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="cit" value="0" min="0" max="30"></div>
+            <span class="unit-tag">%</span>
+          </div>
+          <div class="hint">0% cá nhân/hộ GĐ · 20% doanh nghiệp</div>
+        </div>
+        <div class="fld"></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">🌿</span><span>Môi trường & ESG</span></div>
+    <div class="sec-body">
+      <div class="g3">
+        <div class="fld">
+          <label>Hệ số phát thải lưới VN</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="co2Factor" value="0.812" min="0.1" max="2" step="0.001"></div>
+            <span class="unit-tag">kgCO₂/kWh</span>
+          </div>
+          <div class="hint">MONRE 2023: 0.812 kgCO₂/kWh</div>
+        </div>
+        <div class="fld">
+          <label>Giá tín chỉ carbon</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="carbonPrice" value="5" min="0" max="200"></div>
+            <span class="unit-tag">USD/tCO₂</span>
+          </div>
+          <div class="hint">VN hiện tại ~3–8 USD/tCO₂</div>
+        </div>
+        <div class="fld">
+          <label>Tỷ giá USD/VNĐ</label>
+          <input type="number" id="usdRate" value="25000" min="20000" max="35000">
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-gold" onclick="calculate()">⚡ Tính toán & Xem kết quả</button>
+  <button class="btn btn-sec" onclick="goTo(3)" style="margin-top:.5rem">Phân tích kịch bản trước →</button>
+</div>
+
+<!-- PAGE 3: KỊCH BẢN -->
+<div class="pg" id="pg3">
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">🎚</span><span>Phân tích nhạy cảm — kéo để xem tác động ngay</span></div>
+    <div class="sec-body">
+      <div class="sr"><label>Giá điện (đ/kWh)</label><input type="range" id="sEp" min="1500" max="5000" step="100" value="2900" oninput="onSens()"><span class="sv" id="sEpV">2.900</span></div>
+      <div class="sr"><label>Giờ nắng PSH (h/ngày)</label><input type="range" id="sPsh" min="2" max="7" step="0.5" value="4.5" oninput="onSens()"><span class="sv" id="sPshV">4,5</span></div>
+      <div class="sr"><label>Performance Ratio (%)</label><input type="range" id="sPr" min="60" max="95" step="1" value="80" oninput="onSens()"><span class="sv" id="sPrV">80%</span></div>
+      <div class="sr"><label>Tỷ lệ tự tiêu thụ (%)</label><input type="range" id="sSelf" min="0" max="100" step="5" value="70" oninput="onSens()"><span class="sv" id="sSelfV">70%</span></div>
+      <div class="sr"><label>Tăng giá điện (%/năm)</label><input type="range" id="sEsc" min="0" max="15" step="0.5" value="5" oninput="onSens()"><span class="sv" id="sEscV">5,0%</span></div>
+      <div class="sr"><label>Suy giảm công suất (%/năm)</label><input type="range" id="sDeg" min="0.1" max="3" step="0.1" value="0.7" oninput="onSens()"><span class="sv" id="sDegV">0,7%</span></div>
+      <div class="sr"><label>Lãi suất vay (%/năm)</label><input type="range" id="sLoan" min="0" max="20" step="0.5" value="9" oninput="onSens()"><span class="sv" id="sLoanV">9,0%</span></div>
+    </div>
+  </div>
+  <div id="sensOut"></div>
+  <button class="btn btn-gold" onclick="calculate();goTo(4)" style="margin-top:.75rem">Áp dụng & Xem kết quả →</button>
+</div>
+
+<!-- PAGE 4: KẾT QUẢ -->
+<div class="pg" id="pg4">
+  <div id="noRes" style="padding:4rem;text-align:center;color:var(--text3);background:var(--surface);border-radius:var(--radius-lg);border:1px solid var(--border)">
+    <div style="font-size:40px;margin-bottom:12px">☀</div>
+    <div style="font-weight:600;font-size:15px;color:var(--navy);margin-bottom:6px">Chưa có dữ liệu</div>
+    Nhập thông tin rồi nhấn <strong>"Tính toán"</strong> để xem kết quả
+  </div>
+  <div id="resBox" style="display:none">
+    <div id="co2Strip" class="co2-strip"></div>
+    <div id="warnBox" class="warn-strip" style="display:none"></div>
+    <div class="mtr-g">
+      <div class="mtr hl"><div class="v" id="rTot">—</div><div class="l">Tổng đầu tư (net)</div></div>
+      <div class="mtr nv"><div class="v" id="rPb">—</div><div class="l">Hoàn vốn giản đơn</div></div>
+      <div class="mtr nv"><div class="v" id="rDPb">—</div><div class="l">Hoàn vốn chiết khấu</div></div>
+      <div class="mtr gr"><div class="v" id="rIRR">—</div><div class="l">IRR vốn tự có</div></div>
+    </div>
+    <div class="mtr-g">
+      <div class="mtr bl"><div class="v" id="rNPV">—</div><div class="l">NPV</div><div class="s" id="rNPVs"></div></div>
+      <div class="mtr"><div class="v" id="rROI">—</div><div class="l">ROI toàn vòng đời</div></div>
+      <div class="mtr"><div class="v" id="rKwh">—</div><div class="l">Sản lượng năm đầu</div><div class="s">kWh/năm</div></div>
+      <div class="mtr"><div class="v" id="rSave1">—</div><div class="l">Tiết kiệm năm đầu</div><div class="s">triệu VNĐ</div></div>
+    </div>
+    <div class="mtr-g">
+      <div class="mtr"><div class="v" id="rSaveL">—</div><div class="l">Tiết kiệm tổng</div><div class="s" id="rSaveLS"></div></div>
+      <div class="mtr gr"><div class="v" id="rCo2">—</div><div class="l">CO₂ giảm tổng</div><div class="s">tấn CO₂</div></div>
+      <div class="mtr"><div class="v" id="rCarbon">—</div><div class="l">Tín chỉ carbon</div><div class="s">triệu VNĐ</div></div>
+      <div class="mtr rd"><div class="v" id="rLCOE">—</div><div class="l">LCOE</div><div class="s">đ/kWh</div></div>
+    </div>
+    <div class="bk2">
+      <div class="bkc"><h3>Cơ cấu chi phí đầu tư</h3><div id="bkInvest"></div></div>
+      <div class="bkc"><h3>Hiệu suất khai thác</h3><div id="bkPerf"></div></div>
+    </div>
+    <div class="bk2" id="loanBkWrap" style="display:none">
+      <div class="bkc"><h3>Cơ cấu vốn vay</h3><div id="bkLoan"></div></div>
+      <div class="bkc"><h3>Chi tiết trả nợ</h3><div id="bkDebt"></div></div>
+    </div>
+    <div class="cw">
+      <div class="ct">Dòng tiền tích lũy vốn tự có (triệu VNĐ)</div>
+      <div class="legend">
+        <span><span class="dot" style="background:#1A7A3C"></span>Dương — đã hoàn vốn</span>
+        <span><span class="dot" style="background:#C8102E"></span>Âm — chưa hoàn vốn</span>
+      </div>
+      <div style="position:relative;height:260px"><canvas id="cfChart"></canvas></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.9rem">
+      <div class="cw" style="margin-bottom:0">
+        <div class="ct">Phân bổ chi phí đầu tư</div>
+        <div id="pieLegend" class="legend"></div>
+        <div style="position:relative;height:190px"><canvas id="pieChart"></canvas></div>
+      </div>
+      <div class="cw" style="margin-bottom:0">
+        <div class="ct">Doanh thu & Chi phí hàng năm (tr.VNĐ)</div>
+        <div class="legend">
+          <span><span class="dot" style="background:#1557A0"></span>Doanh thu</span>
+          <span><span class="dot" style="background:#C8102E"></span>Chi phí</span>
+        </div>
+        <div style="position:relative;height:190px"><canvas id="annChart"></canvas></div>
+      </div>
+    </div>
+    <div class="rating-box">
+      <h4>Đánh giá dự án</h4>
+      <div id="ratingTxt" style="font-size:13px;color:var(--text2)"></div>
+    </div>
+    <div class="export-row">
+      <button class="btn btn-sec" onclick="window.print()">🖨 In / PDF</button>
+      <button class="btn btn-sec" onclick="exportCSV()">📄 Xuất CSV</button>
+      <button class="btn btn-gold" onclick="exportExcel()">📊 Excel dòng tiền</button>
+      <button class="btn btn-red" onclick="exportFormulas()">📋 Excel kiểm tra công thức</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 5: THIẾT KẾ ĐỀ XUẤT -->
+<div class="pg" id="pg5">
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">⚡</span><span>Thiết kế đề xuất — Dựa trên thông số đã nhập</span></div>
+    <div class="sec-body">
+      <div style="background:var(--amber-light);border:1px solid #F5C518;border-radius:var(--radius);padding:.65rem .9rem;font-size:12px;color:var(--amber-dark);margin-bottom:1rem">
+        ℹ️ <strong>Lưu ý:</strong> Đây chỉ là đề xuất thiết kế tham khảo dựa trên công suất và loại hệ thống đã chọn. Các thông số này <strong>không ảnh hưởng</strong> đến kết quả tính toán tài chính.
+      </div>
+      <div id="designContent">
+        <div style="text-align:center;padding:2rem;color:var(--text3)">
+          <div style="font-size:28px;margin-bottom:8px">⚡</div>
+          <div style="font-weight:600;color:var(--navy)">Nhập công suất ở tab Dự án để xem đề xuất thiết kế</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="sec-hdr"><span class="ico">📐</span><span>Tùy chỉnh thông số thiết kế</span></div>
+    <div class="sec-body">
+      <div class="g3">
+        <div class="fld">
+          <label>Công suất mỗi tấm pin (Wp)</label>
+          <select id="d_panelWp" onchange="updateDesign()">
+            <option value="350">350 Wp (cũ / giá rẻ)</option>
+            <option value="370">370 Wp</option>
+            <option value="390">390 Wp</option>
+            <option value="400">400 Wp (phổ biến)</option>
+            <option value="420">420 Wp</option>
+            <option value="445" selected>445 Wp (tiêu chuẩn 2024)</option>
+            <option value="460">460 Wp</option>
+            <option value="480">480 Wp</option>
+            <option value="500">500 Wp (high-end)</option>
+            <option value="540">540 Wp (bifacial)</option>
+            <option value="580">580 Wp (bifacial+)</option>
+            <option value="620">620 Wp (thương mại)</option>
+            <option value="665">665 Wp (large format)</option>
+            <option value="700">700 Wp</option>
+            <option value="730">730 Wp</option>
+            <option value="800">800 Wp (utility scale)</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Loại dây cáp DC</label>
+          <select id="d_cableType" onchange="updateDesign()">
+            <option value="4">Cáp 4 mm² (≤10 kWp)</option>
+            <option value="6" selected>Cáp 6 mm² (tiêu chuẩn)</option>
+            <option value="10">Cáp 10 mm² (>50 kWp)</option>
+            <option value="16">Cáp 16 mm² (>100 kWp)</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Khoảng cách trung bình tấm–inverter</label>
+          <div class="with-unit">
+            <div class="fld" style="gap:0"><input type="number" id="d_dist" value="15" min="5" max="200" onchange="updateDesign()"></div>
+            <span class="unit-tag">mét</span>
+          </div>
+        </div>
+      </div>
+      <div class="g3" style="margin-top:10px">
+        <div class="fld">
+          <label>Loại khung giá đỡ</label>
+          <select id="d_mount" onchange="updateDesign()">
+            <option value="roof_hook">Hook mái ngói (phổ biến)</option>
+            <option value="roof_flat" selected>Ballast mái bằng</option>
+            <option value="ground">Ground-mount (mặt đất)</option>
+            <option value="wall">Bức tường / BIPV</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Cấu hình inverter</label>
+          <select id="d_invConf" onchange="updateDesign()">
+            <option value="string" selected>String inverter (tiêu chuẩn)</option>
+            <option value="central">Central inverter (>100 kWp)</option>
+            <option value="micro">Micro inverter (per-panel)</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Hệ số dự phòng inverter</label>
+          <select id="d_invOC" onchange="updateDesign()">
+            <option value="1.0">1.0 — Vừa đủ</option>
+            <option value="1.1" selected>1.1 — +10% (khuyến nghị)</option>
+            <option value="1.2">1.2 — +20% (an toàn cao)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-red" onclick="goTo(6)" style="margin-top:.5rem">Xem Thuật ngữ →</button>
+</div>
+
+<!-- PAGE 5: THUẬT NGỮ -->
+<div class="pg" id="pg6">
+  <div class="glo-wrap">
+    <div class="glo-side">
+      <div class="glo-side-hdr">Danh mục thuật ngữ</div>
+      <div class="glo-search-wrap"><input type="text" id="gloSearch" placeholder="Tìm kiếm..." oninput="filterGlo()"></div>
+      <div id="gloList"></div>
+    </div>
+    <div class="glo-main">
+      <div class="glo-content" id="gloContent">
+        <div class="glo-empty">
+          <div class="eico">📖</div>
+          <div style="font-size:14px;font-weight:600;color:var(--navy)">Chọn thuật ngữ để xem</div>
+          <div style="font-size:12px">Hoặc tìm kiếm theo tên / ký hiệu</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <strong>Solar Project Estimation v3.1</strong><br>
+  GLOBAL INVESTMENT TECHNOLOGY TRANSFER COMPANY LIMITED<br>
+  Kết quả mang tính tham khảo · Chuẩn IEC 61724 · CO₂ theo MONRE 2023
+</div>
+</div><!-- end container -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ─── LOGO ─────────────────────────────────────────────────────────────────────
+(function(){
+  var L='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';
+  var src='data:image/png;base64,'+L;
+  var el1=document.getElementById('topLogo');
+  var el2=document.getElementById('heroLogo');
+  if(el1)el1.src=src;
+  if(el2)el2.src=src;
+})();
+
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+var curPage=0;
+function goTo(n){
+  var pages=document.querySelectorAll('.pg');
+  var steps=document.querySelectorAll('.step-btn');
+  pages.forEach(function(p){p.classList.remove('active');});
+  steps.forEach(function(s,i){
+    s.classList.remove('active','done');
+    if(i<n)s.classList.add('done');
+    if(i===n)s.classList.add('active');
+  });
+  document.getElementById('pg'+n).classList.add('active');
+  curPage=n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+function gv(id){return parseFloat(document.getElementById(id).value)||0;}
+function fmtN(n){return Math.round(n).toLocaleString('vi-VN');}
+function fmtM(n){return (Math.round(n/1e5)/10).toLocaleString('vi-VN',{minimumFractionDigits:1,maximumFractionDigits:1});}
+// fmtD: số thực d chữ số thập phân, dùng locale vi-VN (dấu , cho thập phân)
+function fmtD(n,d){
+  if(d===undefined)d=2;
+  return parseFloat(n).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d});
+}
+// fmtKwp: công suất kWp (2 chữ số TP, ví dụ 10,00 kWp)
+function fmtKwp(n){return fmtD(n,2);}
+// fmtPct: phần trăm 1 chữ số thập phân
+function fmtPct(n){return fmtD(n,1)+'%';}
+// fmtRatio: tỷ số 3 chữ số thập phân (DC/AC)
+function fmtRatio(n){return fmtD(n,3)+'×';}
+
+// ─── SYSTEM TYPE ─────────────────────────────────────────────────────────────
+function onSysType(){
+  var t=document.getElementById('sysType').value;
+  if(t==='hybrid'){document.getElementById('bQty').value=10;}
+  else if(t==='offgrid'){document.getElementById('bQty').value=20;document.getElementById('fitMode').value='none';}
+  else{document.getElementById('bQty').value=0;}
+  liveTotal();
+  updateDesign();
+}
+function onFitMode(){
+  var m=document.getElementById('fitMode').value;
+  document.getElementById('fitPriceBox').style.opacity=(m==='netmeter'||m==='none')?'0.35':'1';
+}
+function onLoan(){
+  var on=document.getElementById('useLoan').checked;
+  var f=document.getElementById('loanFields');
+  if(on){f.classList.add('open');}else{f.classList.remove('open');}
+}
+
+// ─── MATERIAL COSTS ──────────────────────────────────────────────────────────
+var ITEMS=[
+  {q:'pQty',p:'pPrice',s:'sub_p'},
+  {q:'iQty',p:'iPrice',s:'sub_i'},
+  {q:'bQty',p:'bPrice',s:'sub_b'},
+  {q:'cQty',p:'cPrice',s:'sub_c'},
+  {q:'mQty',p:'mPrice',s:'sub_m'},
+  {q:'eQty',p:'ePrice',s:'sub_e'},
+  {q:'lQty',p:'lPrice',s:'sub_l'},
+  {q:'dQty',p:'dPrice',s:'sub_d'},
+  {q:'cmQty',p:'cmPrice',s:'sub_cm'},
+  {q:'prQty',p:'prPrice',s:'sub_pr'},
+  {q:'cnQty',p:'cnPrice',s:'sub_cn'},
+  {q:'inQty',p:'inPrice',s:'sub_in'}
+];
+function getMat(){
+  var mat=gv('pQty')*gv('pPrice')+gv('iQty')*gv('iPrice')+gv('bQty')*gv('bPrice')+
+          gv('cQty')*gv('cPrice')+gv('mQty')*gv('mPrice')+gv('eQty')*gv('ePrice');
+  var lab=gv('lQty')*gv('lPrice')+gv('dQty')*gv('dPrice')+gv('cmQty')*gv('cmPrice');
+  var per=gv('prQty')*gv('prPrice')+gv('cnQty')*gv('cnPrice')+gv('inQty')*gv('inPrice');
+  var sub=gv('subsidy');
+  var total=Math.max(0,mat+lab+per-sub);
+  return {mat:mat,lab:lab,per:per,sub:sub,total:total};
+}
+function liveTotal(){
+  ITEMS.forEach(function(it){
+    var el=document.getElementById(it.s);
+    if(el){el.textContent=fmtN(gv(it.q)*gv(it.p));}
+  });
+  var r=getMat();
+  var cap=gv('cap')||1;
+  var om=gv('maint')+gv('annIns');
+  document.getElementById('tMat').textContent=fmtN(r.mat)+' đ';
+  document.getElementById('tLab').textContent=fmtN(r.lab)+' đ';
+  document.getElementById('tPer').textContent=fmtN(r.per)+' đ';
+  document.getElementById('tTot').textContent=fmtN(r.total)+' đ';
+  document.getElementById('tKwp').textContent=fmtN(r.total/cap)+' đ/kWp';
+  document.getElementById('tOM').textContent=fmtN(om)+' đ/năm';
+  updateDesign();
+}
+
+// ─── PHYSICS ──────────────────────────────────────────────────────────────────
+function tiltF(t){
+  var d=Math.abs(t-15);
+  if(d<=5)return 1.0;
+  if(d<=15)return 0.98;
+  if(d<=25)return 0.95;
+  return 0.90;
+}
+function annKwh(y,p){
+  return p.cap*p.psh*365*(p.pr/100)*p.orient*p.tiltf*Math.pow(1-p.deg/100,y-1);
+}
+function annRev(kwh,y,p){
+  var ep=p.ep*Math.pow(1+p.esc/100,y-1);
+  var self=kwh*(p.self/100);
+  var exp=kwh*(1-p.self/100);
+  var rev=self*ep;
+  if(p.fitMode==='fit')rev+=exp*p.fitP*Math.pow(1+p.esc/100,y-1);
+  else if(p.fitMode==='netmeter')rev+=exp*ep;
+  else if(p.fitMode==='spot')rev+=exp*(p.fitP||ep*0.5)*Math.pow(1+p.esc/100,y-1);
+  return rev;
+}
+function pmt(loan,r,n){
+  if(r===0)return loan/n;
+  var R=r/100;
+  return loan*R*Math.pow(1+R,n)/(Math.pow(1+R,n)-1);
+}
+function calcIRR(flows){
+  var lo=-0.99,hi=10,mid=0;
+  for(var k=0;k<300;k++){
+    mid=(lo+hi)/2;
+    var npv=0;
+    for(var i=0;i<flows.length;i++)npv+=flows[i]/Math.pow(1+mid,i);
+    if(Math.abs(npv)<10)break;
+    if(npv>0)lo=mid;else hi=mid;
+  }
+  return mid;
+}
+function calcNPV(flows,rate){
+  var s=0;
+  for(var i=0;i<flows.length;i++)s+=flows[i]/Math.pow(1+rate,i);
+  return s;
+}
+
+// ─── BUILD FLOWS ──────────────────────────────────────────────────────────────
+var lastAnnData=[];
+function buildFlows(netInvest,eqInvest,p){
+  var eqFlows=[-eqInvest];
+  var totFlows=[-netInvest];
+  var annPMT=p.useLoan?pmt(p.loanAmt,p.loanRate,p.loanTerm):0;
+  var loanBal=p.loanAmt;
+  var totalCo2=0;
+  var annData=[];
+  for(var y=1;y<=p.lifespan;y++){
+    var kwh=annKwh(y,p);
+    totalCo2+=kwh*p.co2f/1000;
+    var rev=annRev(kwh,y,p);
+    var omc=p.maint+p.annIns;
+    if(p.invRep>0&&y===p.invRep)omc+=p.invCost;
+    var depr=y<=p.deprYr?netInvest/p.deprYr:0;
+    var ebit=rev-omc-depr;
+    var tax=(p.cit>0&&ebit>0)?ebit*(p.cit/100):0;
+    var debt=0;
+    if(p.useLoan&&y<=p.loanTerm){
+      var interest=loanBal*(p.loanRate/100);
+      var principal=annPMT-interest;
+      loanBal=Math.max(0,loanBal-principal);
+      debt=annPMT;
+    }
+    totFlows.push(rev-omc-tax);
+    eqFlows.push(rev-omc-tax-debt);
+    annData.push({y:y,kwh:Math.round(kwh),rev:Math.round(rev),omc:Math.round(omc),debt:Math.round(debt)});
+  }
+  return {totFlows:totFlows,eqFlows:eqFlows,annData:annData,totalCo2:totalCo2};
+}
+function getParams(){
+  return {
+    cap:gv('cap'),psh:gv('psh'),pr:gv('pr'),
+    orient:parseFloat(document.getElementById('orient').value),
+    tiltf:tiltF(gv('tilt')),deg:gv('deg'),
+    self:gv('selfUse'),ep:gv('ep'),
+    fitMode:document.getElementById('fitMode').value,
+    fitP:gv('fitP'),esc:gv('esc'),
+    maint:gv('maint'),annIns:gv('annIns'),
+    invRep:gv('invRep'),invCost:gv('iQty')*gv('iPrice'),
+    lifespan:gv('lifespan'),
+    useLoan:document.getElementById('useLoan').checked,
+    loanAmt:0,loanRate:gv('loanRate'),loanTerm:gv('loanTerm'),
+    deprYr:gv('deprYr'),cit:gv('cit'),co2f:gv('co2Factor')
+  };
+}
+
+// ─── CALCULATE ────────────────────────────────────────────────────────────────
+var charts={};
+function destroyC(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+
+function calculate(){
+  var r=getMat();
+  var netInvest=r.total;
+  var p=getParams();
+  var loanRatio=gv('loanRatio')/100;
+  p.loanAmt=p.useLoan?netInvest*loanRatio:0;
+  var eqInvest=netInvest-p.loanAmt;
+
+  var res=buildFlows(netInvest,eqInvest,p);
+  lastAnnData=res.annData;
+  var eqF=res.eqFlows;
+  var lifespan=p.lifespan;
+  var disc=gv('discRate')/100;
+
+  var irr=calcIRR(eqF);
+  var npv=calcNPV(eqF,disc);
+
+  // Payback
+  var cumEq=eqF[0],pbEq=null,cumDisc=eqF[0],pbDisc=null;
+  for(var i=1;i<eqF.length;i++){
+    var prev=cumEq; cumEq+=eqF[i];
+    var dflow=eqF[i]/Math.pow(1+disc,i);
+    var prevD=cumDisc; cumDisc+=dflow;
+    if(cumEq>=0&&pbEq===null){
+      var f=eqF[i]!==0?(-prev/eqF[i]):0;
+      pbEq=fmtD((i-1+Math.min(Math.max(f,0),1)),1);
+    }
+    if(cumDisc>=0&&pbDisc===null){
+      var fd=dflow!==0?(-prevD/dflow):0;
+      pbDisc=fmtD((i-1+Math.min(Math.max(fd,0),1)),1);
+    }
+  }
+
+  var annSave=eqF[1];
+  var lifeTotal=0;
+  for(var j=1;j<eqF.length;j++)lifeTotal+=eqF[j];
+  var roi=(lifeTotal/eqInvest)*100;
+  var totalKwh=0;
+  var totalOmc=0;
+  for(var k=0;k<res.annData.length;k++){totalKwh+=res.annData[k].kwh;totalOmc+=res.annData[k].omc;}
+  var lcoe=(netInvest+totalOmc)/(totalKwh||1);
+  var carbonVal=res.totalCo2*gv('carbonPrice')*gv('usdRate');
+
+  // Show results
+  document.getElementById('noRes').style.display='none';
+  document.getElementById('resBox').style.display='block';
+  document.getElementById('rTot').textContent=fmtM(netInvest)+' tr.đ';
+  document.getElementById('rPb').textContent=pbEq?pbEq+' năm':'> '+lifespan+'n';
+  document.getElementById('rDPb').textContent=pbDisc?pbDisc+' năm':'> '+lifespan+'n';
+  document.getElementById('rIRR').textContent=(irr&&irr>-0.9)?fmtPct(irr*100):'N/A';
+  document.getElementById('rNPV').textContent=(npv>=0?'+':'')+fmtM(npv)+' tr.đ';
+  document.getElementById('rNPVs').textContent='chiết khấu '+gv('discRate')+'%';
+  document.getElementById('rROI').textContent=Math.round(roi)+'%';
+  document.getElementById('rKwh').textContent=Math.round(res.annData[0]?res.annData[0].kwh:0).toLocaleString('vi-VN');
+  document.getElementById('rSave1').textContent=fmtM(annSave);
+  document.getElementById('rSaveL').textContent=fmtM(lifeTotal);
+  document.getElementById('rSaveLS').textContent=lifespan+' năm';
+  document.getElementById('rCo2').textContent=Math.round(res.totalCo2).toLocaleString('vi-VN');
+  document.getElementById('rCarbon').textContent=fmtM(carbonVal);
+  document.getElementById('rLCOE').textContent=Math.round(lcoe).toLocaleString('vi-VN');
+
+  // CO2 strip
+  var co2y1=res.annData[0]?res.annData[0].kwh*gv('co2Factor')/1000:0;
+  document.getElementById('co2Strip').innerHTML=
+    '<span class="ico">🌿</span><div class="txt"><strong>Năm đầu giảm '+fmtD(co2y1,1)+' tấn CO₂</strong> — tương đương trồng '+Math.round(co2y1*45)+' cây xanh</div>'+
+    '<span class="val">'+Math.round(res.totalCo2).toLocaleString('vi-VN')+' tCO₂ / '+lifespan+' năm</span>';
+
+  // Warnings
+  var warns=[];
+  if(document.getElementById('fitMode').value==='fit')warns.push('⚠ FIT tại VN đang tạm dừng. Khuyến nghị dùng Net Metering (NĐ 135/2024).');
+  if(gv('selfUse')>90)warns.push('⚠ Tỷ lệ tự tiêu thụ >90% khó đạt nếu không có battery đủ lớn.');
+  if(irr!==null&&irr>-0.9&&disc&&irr<disc)warns.push('⚠ IRR thấp hơn tỷ lệ chiết khấu — NPV âm. Dự án chưa hiệu quả.');
+  var wb=document.getElementById('warnBox');
+  if(warns.length){wb.innerHTML=warns.join('<br>');wb.style.display='block';}
+  else wb.style.display='none';
+
+  // Breakdowns
+  document.getElementById('bkInvest').innerHTML=
+    '<div class="bkr"><span>Vật tư thiết bị</span><span>'+fmtM(r.mat)+' tr.đ</span></div>'+
+    '<div class="bkr"><span>Nhân công & DV</span><span>'+fmtM(r.lab)+' tr.đ</span></div>'+
+    '<div class="bkr"><span>Cấp phép & ĐN</span><span>'+fmtM(r.per)+' tr.đ</span></div>'+
+    (r.sub>0?'<div class="bkr"><span>Trừ trợ cấp</span><span>-'+fmtM(r.sub)+' tr.đ</span></div>':'')+
+    '<div class="bkr"><span>Net đầu tư</span><span>'+fmtM(netInvest)+' tr.đ</span></div>'+
+    '<div class="bkr"><span>Chi phí/kWp</span><span>'+(Math.round(netInvest/p.cap/1e6*10)/10)+' tr.đ/kWp</span></div>';
+
+  document.getElementById('bkPerf').innerHTML=
+    '<div class="bkr"><span>Sản lượng năm 1</span><span>'+Math.round(res.annData[0]?res.annData[0].kwh:0).toLocaleString('vi-VN')+' kWh</span></div>'+
+    '<div class="bkr"><span>Doanh thu năm 1</span><span>'+fmtM(res.annData[0]?res.annData[0].rev:0)+' tr.đ</span></div>'+
+    '<div class="bkr"><span>LCOE</span><span>'+Math.round(lcoe).toLocaleString('vi-VN')+' đ/kWh</span></div>'+
+    '<div class="bkr"><span>IRR vốn tự có</span><span>'+((irr&&irr>-0.9)?fmtPct(irr*100):'N/A')+'</span></div>'+
+    '<div class="bkr"><span>NPV ('+gv('discRate')+'%)</span><span>'+(npv>=0?'+':'')+fmtM(npv)+' tr.đ</span></div>';
+
+  if(p.useLoan){
+    document.getElementById('loanBkWrap').style.display='grid';
+    var annP=pmt(p.loanAmt,gv('loanRate'),gv('loanTerm'));
+    document.getElementById('bkLoan').innerHTML=
+      '<div class="bkr"><span>Vốn vay ('+Math.round(loanRatio*100)+'%)</span><span>'+fmtM(p.loanAmt)+' tr.đ</span></div>'+
+      '<div class="bkr"><span>Vốn tự có ('+Math.round((1-loanRatio)*100)+'%)</span><span>'+fmtM(eqInvest)+' tr.đ</span></div>'+
+      '<div class="bkr"><span>Lãi suất</span><span>'+gv('loanRate')+'%/năm</span></div>'+
+      '<div class="bkr"><span>Kỳ hạn</span><span>'+gv('loanTerm')+' năm</span></div>';
+    document.getElementById('bkDebt').innerHTML=
+      '<div class="bkr"><span>Trả nợ hàng năm</span><span>'+fmtM(annP)+' tr.đ</span></div>'+
+      '<div class="bkr"><span>Tổng lãi vay</span><span>'+fmtM(annP*gv('loanTerm')-p.loanAmt)+' tr.đ</span></div>'+
+      '<div class="bkr"><span>Tổng gốc+lãi</span><span>'+fmtM(annP*gv('loanTerm'))+' tr.đ</span></div>';
+  } else {
+    document.getElementById('loanBkWrap').style.display='none';
+  }
+
+  // Charts
+  var cumArr=[eqF[0]]; var cc=eqF[0];
+  for(var ci=1;ci<eqF.length;ci++){cc+=eqF[ci];cumArr.push(cc);}
+  var cfLabels=['Đầu tư'];
+  for(var li=0;li<res.annData.length;li++)cfLabels.push('N'+res.annData[li].y);
+  var cfColors=cumArr.map(function(v){return v>=0?'#1A7A3C':'#C8102E';});
+
+  destroyC('cf');
+  if(typeof Chart!=='undefined'){
+    charts['cf']=new Chart(document.getElementById('cfChart').getContext('2d'),{
+      type:'bar',
+      data:{labels:cfLabels,datasets:[{label:'Tích lũy (tr.đ)',data:cumArr.map(function(v){return parseFloat((v/1e6).toFixed(1));}),backgroundColor:cfColors,borderRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.parsed.y>=0?'+':'')+fmtD(c.parsed.y,1)+' tr.đ';}}}},scales:{y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:function(v){return (v>=0?'+':'')+v;}}},x:{grid:{display:false},ticks:{font:{size:9},maxRotation:0,autoSkip:true,maxTicksLimit:15}}}}
+    });
+  }
+
+  var pieData=[{l:'Vật tư',v:r.mat,c:'#C8102E'},{l:'Nhân công & DV',v:r.lab,c:'#0D1B3E'},{l:'Cấp phép & ĐN',v:r.per,c:'#1A7A3C'}].filter(function(d){return d.v>0;});
+  document.getElementById('pieLegend').innerHTML=pieData.map(function(d){
+    return '<span><span class="dot" style="background:'+d.c+'"></span>'+d.l+': '+Math.round(d.v/netInvest*100)+'%</span>';
+  }).join('');
+  destroyC('pie');
+  if(typeof Chart!=='undefined'){
+    charts['pie']=new Chart(document.getElementById('pieChart').getContext('2d'),{
+      type:'doughnut',
+      data:{labels:pieData.map(function(d){return d.l;}),datasets:[{data:pieData.map(function(d){return Math.round(d.v/1e6*10)/10;}),backgroundColor:pieData.map(function(d){return d.c;}),borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+fmtD(c.parsed,1)+' tr.đ';}}}}}
+    });
+  }
+
+  destroyC('ann');
+  if(typeof Chart!=='undefined'){
+    charts['ann']=new Chart(document.getElementById('annChart').getContext('2d'),{
+      type:'bar',
+      data:{
+        labels:res.annData.map(function(d){return 'N'+d.y;}),
+        datasets:[
+          {label:'Doanh thu',data:res.annData.map(function(d){return parseFloat((d.rev/1e6).toFixed(1));}),backgroundColor:'#1557A0',borderRadius:2},
+          {label:'Chi phí',data:res.annData.map(function(d){return parseFloat(((d.omc+d.debt)/1e6).toFixed(1));}),backgroundColor:'#C8102E',borderRadius:2}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9},autoSkip:true,maxTicksLimit:12}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{callback:function(v){return v+' tr';}}}}}
+    });
+  }
+
+  // Rating
+  var pb=parseFloat(pbEq)||99;
+  var rtxt,rtag;
+  if(pb<=6){rtxt='Xuất sắc — Hoàn vốn rất nhanh. Dự án có hiệu quả đầu tư cao, phù hợp triển khai ngay.';rtag='tag-g';}
+  else if(pb<=9){rtxt='Tốt — Thời gian hoàn vốn hợp lý. Phù hợp cho hộ gia đình và doanh nghiệp SME.';rtag='tag-g';}
+  else if(pb<=13){rtxt='Khá — Hiệu quả trung bình. Nên tối ưu PR, tỷ lệ tự tiêu thụ hoặc xem xét đòn bẩy tài chính.';rtag='tag-w';}
+  else{rtxt='Cần xem xét — Hoàn vốn dài. Kiểm tra lại chi phí đầu tư, giá điện, hoặc công suất hệ thống.';rtag='tag-r';}
+  document.getElementById('ratingTxt').innerHTML='<span class="tag '+rtag+'">'+(rtag==='tag-g'?'Tốt':rtag==='tag-w'?'Trung bình':'Cần xem xét')+'</span> '+rtxt;
+
+  goTo(4);
+}
+
+// ─── SENSITIVITY ──────────────────────────────────────────────────────────────
+function onSens(){
+  var eV=parseFloat(document.getElementById('sEp').value);
+  var pV=parseFloat(document.getElementById('sPsh').value);
+  var prV=parseFloat(document.getElementById('sPr').value);
+  var sfV=parseFloat(document.getElementById('sSelf').value);
+  var escV=parseFloat(document.getElementById('sEsc').value);
+  var degV=parseFloat(document.getElementById('sDeg').value);
+  var lrV=parseFloat(document.getElementById('sLoan').value);
+  document.getElementById('sEpV').textContent=eV.toLocaleString('vi-VN');
+  document.getElementById('sPshV').textContent=fmtD(pV,1);
+  document.getElementById('sPrV').textContent=fmtD(prV,0)+'%';
+  document.getElementById('sSelfV').textContent=fmtD(sfV,0)+'%';
+  document.getElementById('sEscV').textContent=fmtD(escV,1)+'%/năm';
+  document.getElementById('sDegV').textContent=fmtD(degV,1)+'%/năm';
+  document.getElementById('sLoanV').textContent=fmtD(lrV,1)+'%/năm';
+  // sync to inputs
+  document.getElementById('ep').value=eV;
+  document.getElementById('psh').value=pV;
+  document.getElementById('pr').value=prV;
+  document.getElementById('selfUse').value=sfV;
+  document.getElementById('esc').value=escV;
+  document.getElementById('deg').value=degV;
+  document.getElementById('loanRate').value=lrV;
+  // quick calc
+  var inv=getMat().total;
+  if(inv<1000){document.getElementById('sensOut').innerHTML='<p style="font-size:12px;color:var(--text3);padding:.5rem 0">Nhập chi phí ở bước 2 trước.</p>';return;}
+  var p=getParams();
+  p.psh=pV;p.pr=prV;p.self=sfV;p.ep=eV;p.esc=escV;p.deg=degV;p.loanRate=lrV;
+  var lR=gv('loanRatio')/100;
+  p.loanAmt=p.useLoan?inv*lR:0;
+  var eqI=inv-p.loanAmt;
+  var res=buildFlows(inv,eqI,p);
+  var eqF=res.eqFlows;
+  var irr=calcIRR(eqF);
+  var npv=calcNPV(eqF,gv('discRate')/100);
+  var cum=eqF[0],pb=null;
+  for(var i=1;i<eqF.length;i++){
+    var prev2=cum;cum+=eqF[i];
+    if(cum>=0&&pb===null){var f=eqF[i]!==0?(-prev2/eqF[i]):0;pb=fmtD((i-1+Math.min(Math.max(f,0),1)),1);}
+  }
+  document.getElementById('sensOut').innerHTML=
+    '<div class="mtr-g" style="margin-top:.75rem">'+
+    '<div class="mtr nv"><div class="v">'+(pb?pb+' năm':'> '+p.lifespan+'n')+'</div><div class="l">Hoàn vốn</div></div>'+
+    '<div class="mtr gr"><div class="v">'+((irr&&irr>-0.9)?fmtPct(irr*100):'N/A')+'</div><div class="l">IRR</div></div>'+
+    '<div class="mtr bl"><div class="v">'+(npv>=0?'+':'')+fmtM(npv)+' tr</div><div class="l">NPV</div></div>'+
+    '<div class="mtr"><div class="v">'+fmtM(eqF[1])+' tr</div><div class="l">Tiết kiệm năm 1</div></div>'+
+    '</div>';
+}
+
+// ─── EXPORT CSV ───────────────────────────────────────────────────────────────
+function exportCSV(){
+  if(!lastAnnData||lastAnnData.length===0){alert('Vui lòng tính toán trước.');return;}
+  var csv='Năm,Sản lượng (kWh),Doanh thu (đ),O&M (đ),Trả nợ (đ),CF ròng (đ)\n';
+  for(var i=0;i<lastAnnData.length;i++){
+    var d=lastAnnData[i];
+    csv+=d.y+','+d.kwh+','+d.rev+','+d.omc+','+d.debt+','+Math.round(d.rev-d.omc-d.debt)+'\n';
+  }
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='GITT_Solar_Cashflow.csv';
+  a.click();
+}
+
+// ─── EXPORT EXCEL ─────────────────────────────────────────────────────────────
+function exportExcel(){
+  if(!lastAnnData||lastAnnData.length===0){alert('Vui lòng tính toán trước.');return;}
+  if(typeof XLSX!=='undefined'){_doExcel();}
+  else{
+    var s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload=function(){_doExcel();};
+    document.head.appendChild(s);
+  }
+}
+function _doExcel(){
+  var wb=XLSX.utils.book_new();
+  var r=getMat();
+  var netInv=r.total;
+  var cap=gv('cap');
+
+  // Sheet 1: Thông số
+  var s1=[
+    ['SOLAR PROJECT ESTIMATION — GITT'],
+    ['GLOBAL INVESTMENT TECHNOLOGY TRANSFER COMPANY LIMITED'],[''],
+    ['THÔNG SỐ ĐẦU VÀO','','Giá trị','Đơn vị'],
+    ['Công suất','kWp',cap,'kWp'],
+    ['Giờ nắng PSH','PSH',gv('psh'),'h/ngày'],
+    ['Performance Ratio','PR',gv('pr')/100,'%'],
+    ['Suy giảm/năm','δ',gv('deg')/100,'%/năm'],
+    ['Tuổi thọ','N',gv('lifespan'),'năm'],
+    ['Giá điện ban đầu','EP₀',gv('ep'),'đ/kWh'],
+    ['Tăng giá điện/năm','esc',gv('esc')/100,'%/năm'],
+    ['Tỷ lệ tự tiêu thụ','selfUse',gv('selfUse')/100,'%'],
+    ['Chiết khấu WACC','WACC',gv('discRate')/100,'%'],[''],
+    ['CHI PHÍ ĐẦU TƯ','','Giá trị','VNĐ'],
+    ['Vật tư thiết bị','C_mat',r.mat,''],
+    ['Nhân công & DV','C_lab',r.lab,''],
+    ['Cấp phép & ĐN','C_per',r.per,''],
+    ['Tổng đầu tư (CAPEX)','CAPEX',netInv,'']
+  ];
+  var ws1=XLSX.utils.aoa_to_sheet(s1);
+  ws1['!cols']=[{wch:30},{wch:10},{wch:18},{wch:12}];
+  XLSX.utils.book_append_sheet(wb,ws1,'1. Thông số');
+
+  // Sheet 2: Công thức
+  var s2=[
+    ['BẢNG CÔNG THỨC — SOLAR PROJECT ESTIMATION'],[''],
+    ['Chỉ số','Ký hiệu','Công thức','Đơn vị'],
+    ['Sản lượng điện năm y','E(y)','= kWp × PSH × 365 × PR × f_orient × f_tilt × (1−δ)^(y−1)','kWh/năm'],
+    ['Giá điện năm y','EP(y)','= EP₀ × (1+esc)^(y−1)','đ/kWh'],
+    ['Doanh thu Net Metering','Rev(y)','= E(y) × EP(y)','VNĐ/năm'],
+    ['Chi phí O&M năm y','C_om(y)','= C_maint + C_ins + C_inv_thay (nếu y=năm thay)','VNĐ/năm'],
+    ['Khấu hao','Depr(y)','= CAPEX/N_depr nếu y≤N_depr; else 0','VNĐ/năm'],
+    ['Thuế CIT','Tax(y)','= MAX(0, (Rev−C_om−Depr)) × CIT%','VNĐ/năm'],
+    ['Trả nợ annuity','PMT','= Loan × r × (1+r)^n / [(1+r)^n − 1]','VNĐ/năm'],
+    ['CF vốn tự có','CF(y)','= Rev(y) − C_om(y) − Tax(y) − PMT(y)','VNĐ/năm'],
+    ['CF tích lũy','CUM(y)','= CUM(y−1) + CF(y); CUM(0) = −Vốn_tự_có','VNĐ'],
+    ['Hoàn vốn','PB','= năm y* khi CUM(y*)≥0; nội suy = (y*−1)+|CUM(y*−1)|/CF(y*)','năm'],
+    ['NPV','NPV','= Σ [CF(y)/(1+WACC)^y], y=0..N','VNĐ'],
+    ['IRR','IRR','= r* sao cho NPV(r*)=0 (binary search)','%'],
+    ['ROI','ROI','= Σ CF(y>0) / Vốn_tự_có × 100%','%'],
+    ['LCOE','LCOE','= (CAPEX + Σ C_om(y)) / Σ E(y)','đ/kWh'],
+    ['CO₂ giảm năm y','CO₂(y)','= E(y) × EF / 1000; EF=0.812 kgCO₂/kWh','tấnCO₂/năm']
+  ];
+  var ws2=XLSX.utils.aoa_to_sheet(s2);
+  ws2['!cols']=[{wch:28},{wch:10},{wch:55},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws2,'2. Công thức');
+
+  // Sheet 3: Dòng tiền
+  var s3=[
+    ['BẢNG DÒNG TIỀN 25 NĂM'],[''],
+    ['Năm','Sản lượng (kWh)','Giá điện (đ/kWh)','Doanh thu (tr.đ)','O&M (tr.đ)','Trả nợ (tr.đ)','CF ròng (tr.đ)','CF tích lũy (tr.đ)','CO₂ giảm (tCO₂)']
+  ];
+  var ep0=gv('ep'),esc0=gv('esc')/100;
+  var cum2=-netInv/1e6;
+  var co2f=gv('co2Factor');
+  s3.push([0,'-','-','-','-','-',(-netInv/1e6).toFixed(1),(cum2).toFixed(1),'-']);
+  for(var i2=0;i2<lastAnnData.length;i2++){
+    var d=lastAnnData[i2];
+    var cf2=(d.rev-d.omc-d.debt)/1e6;
+    cum2+=cf2;
+    var co2row=d.kwh*co2f/1000;
+    s3.push([d.y,d.kwh,Math.round(ep0*Math.pow(1+esc0,d.y-1)),(d.rev/1e6).toFixed(1),(d.omc/1e6).toFixed(1),(d.debt/1e6).toFixed(1),cf2.toFixed(1),cum2.toFixed(1),(co2row).toFixed(1)]);
+  }
+  var ws3=XLSX.utils.aoa_to_sheet(s3);
+  ws3['!cols']=[{wch:7},{wch:14},{wch:13},{wch:14},{wch:12},{wch:12},{wch:13},{wch:15},{wch:13}];
+  XLSX.utils.book_append_sheet(wb,ws3,'3. Dòng tiền 25 năm');
+
+  // Sheet 4: Vật tư
+  var s4=[
+    ['BẢNG VẬT TƯ & DỊCH VỤ'],[''],
+    ['Hạng mục','Loại','Số lượng','Đơn giá (VNĐ)','Thành tiền (VNĐ)'],
+    ['Tấm pin Solar','Vật tư',gv('pQty'),gv('pPrice'),gv('pQty')*gv('pPrice')],
+    ['Inverter','Vật tư',gv('iQty'),gv('iPrice'),gv('iQty')*gv('iPrice')],
+    ['Pin lưu trữ (Battery)','Vật tư',gv('bQty'),gv('bPrice'),gv('bQty')*gv('bPrice')],
+    ['Dây cáp & phụ kiện','Vật tư',gv('cQty'),gv('cPrice'),gv('cQty')*gv('cPrice')],
+    ['Khung giá đỡ','Vật tư',gv('mQty'),gv('mPrice'),gv('mQty')*gv('mPrice')],
+    ['Tủ điện & bảo vệ','Vật tư',gv('eQty'),gv('ePrice'),gv('eQty')*gv('ePrice')],
+    ['Nhân công thi công','Nhân công',gv('lQty'),gv('lPrice'),gv('lQty')*gv('lPrice')],
+    ['Khảo sát & thiết kế','Nhân công',gv('dQty'),gv('dPrice'),gv('dQty')*gv('dPrice')],
+    ['Commissioning','Dịch vụ',gv('cmQty'),gv('cmPrice'),gv('cmQty')*gv('cmPrice')],
+    ['Đăng ký & cấp phép EVN','Cấp phép',gv('prQty'),gv('prPrice'),gv('prQty')*gv('prPrice')],
+    ['Đấu nối & kiểm định','Cấp phép',gv('cnQty'),gv('cnPrice'),gv('cnQty')*gv('cnPrice')],
+    ['Bảo hiểm công trình','Bảo hiểm',gv('inQty'),gv('inPrice'),gv('inQty')*gv('inPrice')],
+    [''],
+    ['TỔNG VẬT TƯ','','','',r.mat],
+    ['TỔNG NHÂN CÔNG & DV','','','',r.lab],
+    ['TỔNG CẤP PHÉP & ĐN','','','',r.per],
+    ['TỔNG ĐẦU TƯ (CAPEX)','','','',netInv]
+  ];
+  var ws4=XLSX.utils.aoa_to_sheet(s4);
+  ws4['!cols']=[{wch:28},{wch:12},{wch:10},{wch:18},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,ws4,'4. Vật tư chi tiết');
+
+  var now=new Date();
+  var ts=now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+''+String(now.getDate()).padStart(2,'0');
+  XLSX.writeFile(wb,'GITT_Solar_Estimation_'+ts+'.xlsx');
+}
+
+// ─── GLOSSARY DATA ────────────────────────────────────────────────────────────
+var GLO=[
+  {id:'capex',cat:'Chi phí đầu tư',name:'CAPEX — Tổng đầu tư',sym:'C₀',
+   def:'Capital Expenditure — Tổng chi phí đầu tư ban đầu để xây dựng hệ thống Solar, phát sinh một lần tại năm 0.',
+   formula:'CAPEX = C_mat + C_nhân_công + C_cấp_phép − Trợ_cấp\nC_mat = Σ(Số lượng × Đơn giá)',
+   detail:'CAPEX là mẫu số trong mọi chỉ số tài chính. Giảm CAPEX 10% thường cải thiện IRR nhiều hơn tăng doanh thu 10%. Benchmark VN 2024: 18–28 tr.đ/kWp cho On-Grid.',
+   example:'10 kWp tại TP.HCM:\n• Tấm pin: 25 × 3.500.000 = 87.500.000 đ\n• Inverter: 1 × 15.000.000 = 15.000.000 đ\n• Nhân công + cấp phép: ~20.000.000 đ\n→ CAPEX ≈ 122.500.000 đ = 12,25 tr.đ/kWp',
+   impacts:[{dir:'up',desc:'CAPEX tăng → Hoàn vốn dài hơn, IRR giảm, LCOE tăng'},{dir:'dn',desc:'Đàm phán thiết bị tốt → Cải thiện tất cả chỉ số tài chính'}],
+   tags:['Đầu tư','Tài chính'],ref:'IEC 61724 / CFA Institute'},
+
+  {id:'kwp',cat:'Kỹ thuật',name:'Công suất (kWp)',sym:'P_peak',
+   def:'Kilowatt-peak — Công suất tối đa của hệ thống trong điều kiện chuẩn (STC: 1000 W/m², 25°C, AM 1.5). Là "kích thước" của hệ thống.',
+   formula:'kWp = Số_tấm × P_tấm(Wp) / 1000\nDiện tích ≈ kWp × 6 m²\nSản lượng ≈ kWp × PSH × 365 × PR',
+   detail:'Mỗi kWp tại miền Nam sản xuất ~1.400–1.600 kWh/năm. Tấm pin phổ biến: 400–450 Wp/tấm. 10 kWp ≈ 22–25 tấm, diện tích mái ~60–70 m².',
+   example:'Nhu cầu điện → kWp cần:\n• Hộ dùng 400 kWh/tháng → 3–4 kWp\n• SME dùng 5.000 kWh/tháng → 35–45 kWp\n• Nhà máy 50.000 kWh/tháng → 300–400 kWp',
+   impacts:[{dir:'up',desc:'kWp lớn → Sản lượng nhiều, CAPEX cao tỉ lệ thuận'},{dir:'dn',desc:'kWp nhỏ hơn nhu cầu → Tiết kiệm không tối ưu'}],
+   tags:['Kỹ thuật','Thiết kế'],ref:'IEC 60904 / IEC 61215'},
+
+  {id:'psh',cat:'Kỹ thuật',name:'Giờ nắng đỉnh (PSH)',sym:'PSH',
+   def:'Peak Sun Hours — Số giờ quy đổi mặt trời chiếu với cường độ tương đương 1.000 W/m² trong một ngày. PSH = 4,5 h/ngày = bức xạ ngày 4.500 Wh/m².',
+   formula:'PSH = Tổng bức xạ ngày (Wh/m²) / 1000\nE_lý_thuyết = P_peak(kW) × PSH(h)',
+   detail:'PSH tại VN (NASA POWER):\n• TP.HCM: 4,5–5,5 h/ngày\n• Đà Nẵng: 4,5–5,5 h/ngày\n• Hà Nội: 3,5–4,5 h/ngày\n• ĐBSCL: 5,0–5,8 h/ngày',
+   example:'PSH tăng 4.5 → 5.0 h/ngày:\n10 kWp × 0.5h × 365 × 80% = 1.460 kWh/năm thêm\n× 2.900đ = 4.234.000đ/năm thêm\n25 năm ≈ +105 triệu đồng!',
+   impacts:[{dir:'up',desc:'PSH cao (vùng nắng nhiều) → Sản lượng tăng, hoàn vốn nhanh hơn'},{dir:'dn',desc:'PSH thấp (miền Bắc mùa đông) → Cần tính kỹ để tránh đầu tư quá mức'}],
+   tags:['Kỹ thuật','Địa điểm'],ref:'NASA POWER / PVGIS'},
+
+  {id:'pr',cat:'Kỹ thuật',name:'Performance Ratio (PR)',sym:'PR',
+   def:'Tỷ lệ hiệu suất tổng hợp — tỉ lệ giữa điện thực tế sản xuất và điện lý thuyết. PR < 1 vì luôn có tổn thất (nhiệt độ, bụi, dây dẫn, inverter).',
+   formula:'PR = E_thực_tế / (P_peak × PSH × 365)\nTổn thất thường gặp:\n• Nhiệt độ: -5% đến -15%\n• Bụi, bóng che: -2% đến -8%\n• Inverter + dây: -3% đến -8%',
+   detail:'PR điển hình VN: 75–85%. PR thấp thường do bụi bẩn không vệ sinh, bóng che từ công trình lân cận, inverter kém chất lượng, hoặc dây cáp DC quá nhỏ gây tổn thất nhiệt.',
+   example:'2 hệ thống cùng 10 kWp, PSH=4,5:\n• PR=85%: 13.930 kWh/năm\n• PR=75%: 12.319 kWh/năm\nChênh 1.611 kWh/năm × 2.900đ = 4.672.000đ\nTrong 25 năm: ~116 triệu đồng!',
+   impacts:[{dir:'up',desc:'PR cao → Cùng kWp nhưng sản lượng nhiều hơn, LCOE thấp hơn'},{dir:'dn',desc:'PR thấp → Kiểm tra bụi bẩn, bóng che, cáp DC bị nóng, inverter'}],
+   tags:['Kỹ thuật','IEC 61724'],ref:'IEC 61724-1:2021'},
+
+  {id:'deg',cat:'Kỹ thuật',name:'Suy giảm công suất (δ)',sym:'δ',
+   def:'Tỷ lệ sụt giảm công suất tuyến tính mỗi năm do lão hóa vật liệu bán dẫn. Nhà sản xuất cam kết trong bảo hành 25 năm.',
+   formula:'P(y) = P_peak × (1 − δ)^(y−1)\nVí dụ δ=0.7%:\n• Năm 10: 93.7% P_peak\n• Năm 25: 84.4% P_peak',
+   detail:'IEC 61215: Mono PERC ≤0.7%/năm | Poly ≤0.8%/năm. Tấm cao cấp (LONGi, JA, Jinko): ≤0.55%/năm. Bảo hành chuẩn: ≥80% sau 25 năm.',
+   example:'δ=0.5% vs δ=1.0% trong 25 năm:\n• δ=0.5%: Tổng sản lượng ≈ 23.1 × E(1)\n• δ=1.0%: Tổng sản lượng ≈ 22.0 × E(1)\nChênh 5% → 10kWp: ~14.700 kWh → ~42 triệu đồng!',
+   impacts:[{dir:'up',desc:'δ thấp (tấm chất lượng cao) → Hiệu quả dài hạn tốt hơn đáng kể'},{dir:'dn',desc:'δ cao (tấm rẻ) → Tiết kiệm CAPEX nhưng mất doanh thu dài hạn'}],
+   tags:['Kỹ thuật','IEC 61215','Chất lượng'],ref:'IEC 61215:2021'},
+
+  {id:'f_orient',cat:'Kỹ thuật',name:'Hệ số hướng lắp (f_orient)',sym:'f_orient',
+   def:'Hệ số hiệu chỉnh sản lượng theo hướng lắp tấm pin. Hướng Nam là tối ưu tại VN (bán cầu Bắc).',
+   formula:'Nam: f = 1.00 (tối ưu)\nĐN / TN: f = 0.97 (mất 3%)\nĐông / Tây: f = 0.90 (mất 10%)\nĐB / TB: f = 0.80 (mất 20%)\nBắc: f = 0.70 (mất 30%)',
+   detail:'Giá trị dựa trên mô phỏng PVGIS cho vĩ độ 10–20°N (VN). Mái nhà thực tế thường Đông-Tây — mất ~10% nhưng trải đều peak generation sáng/chiều, giảm tải giờ cao điểm.',
+   example:'Nhà mái Đông-Tây, 10 kWp mỗi chiều:\n• Mái Đông (f=0.90): 11.826 kWh/năm\n• Mái Tây (f=0.90): 11.826 kWh/năm\nTổng 20kWp: 23.652 kWh/năm\nvs mái Nam hoàn toàn: 26.280 kWh/năm\n(mất ~10% nhưng diện tích gấp đôi)',
+   impacts:[{dir:'up',desc:'Hướng Nam → Sản lượng tối đa, LCOE thấp nhất'},{dir:'dn',desc:'Hướng Đông/Tây mất 10% nhưng trải đều generation, ít tải lưới hơn'}],
+   tags:['Kỹ thuật','Thiết kế','PVGIS'],ref:'PVGIS / IEC 61724'},
+
+  {id:'f_tilt',cat:'Kỹ thuật',name:'Hệ số góc nghiêng (f_tilt)',sym:'f_tilt',
+   def:'Hệ số hiệu chỉnh sản lượng theo góc nghiêng tấm pin. Góc tối ưu ≈ vĩ độ địa điểm lắp đặt.',
+   formula:'Tối ưu VN: 10–20° (tùy vĩ độ)\n|góc−15°| ≤ 5°: f = 1.00\n|góc−15°| ≤ 15°: f = 0.98\n|góc−15°| ≤ 25°: f = 0.95\n|góc−15°| > 25°: f = 0.90',
+   detail:'Mái nhà VN thường 15–30°, khá phù hợp. Mái bằng (0°) mất ~5–8% và dễ đọng bụi nước. HCM tối ưu ~12–15°; Hà Nội tối ưu ~18–22°.',
+   example:'10 kWp với các góc khác nhau:\n• 15° (tối ưu): 13.140 kWh/năm\n• 0° (mái bằng, f=0.98): 12.877 kWh\n• 45° (mái dốc, f=0.90): 11.826 kWh\nChênh giữa tốt nhất/xấu nhất: 1.314 kWh/năm\n≈ 3.8 triệu đồng/năm',
+   impacts:[{dir:'up',desc:'Góc gần tối ưu → Sản lượng cao nhất, quan trọng với mái phẳng'},{dir:'dn',desc:'Mái dốc đứng (>40°) → Mất sản lượng nhưng tự làm sạch tốt hơn'}],
+   tags:['Kỹ thuật','Thiết kế'],ref:'PVGIS / IEC 61724'},
+
+  {id:'ep0',cat:'Doanh thu',name:'Giá điện ban đầu (EP₀)',sym:'EP₀',
+   def:'Giá điện lưới EVN tại thời điểm bắt đầu dự án (đ/kWh). Là giá bình quân thực tế đang trả trên hóa đơn.',
+   formula:'EP₀ theo bậc thang (2024):\n• Bậc 1 (≤50 kWh): 1.893 đ\n• Bậc 3 (101–200 kWh): 2.271 đ\n• Bậc 4 (201–300 kWh): 2.860 đ\n• Bậc 6 (>400 kWh): 3.302 đ\nBình quân TT: ~2.700–3.200 đ/kWh',
+   detail:'EP₀ là thông số nhạy cảm nhất của mô hình — thay đổi 10% EP₀ thường thay đổi IRR 1–2 điểm phần trăm. Doanh nghiệp thường trả 2.500–3.500 đ/kWh tùy cấp điện áp và giờ.',
+   example:'Nhạy cảm 10 kWp, CAPEX=120tr:\n• EP₀=2.500đ → PB ≈ 8.5 năm, IRR ≈ 9%\n• EP₀=2.900đ → PB ≈ 7.0 năm, IRR ≈ 12%\n• EP₀=3.500đ → PB ≈ 5.8 năm, IRR ≈ 16%\nMỗi 100đ/kWh tăng = ±0.5 năm PB',
+   impacts:[{dir:'up',desc:'EP₀ cao → Tiết kiệm nhiều hơn, hoàn vốn nhanh hơn rõ rệt'},{dir:'dn',desc:'EP₀ thấp → Dự án kém hấp dẫn, cần xem lại quy mô hoặc CAPEX'}],
+   tags:['Doanh thu','Giá điện','EVN'],ref:'QĐ 882/QĐ-BCT 2023'},
+
+  {id:'netmeter',cat:'Doanh thu',name:'Net Metering',sym:'NM',
+   def:'Cơ chế bù trừ điện năng: điện dư từ Solar gửi lên lưới, được bù trừ với điện lấy từ lưới vào giờ tối theo đúng giá tiêu thụ.',
+   formula:'Với Net Metering:\nRev(y) = E(y) × EP(y)\n(toàn bộ sản lượng tính theo giá tiêu thụ)\n\nHóa đơn tháng:\n= MAX(0, E_lấy_lưới − E_Solar) × EP',
+   detail:'Net Metering là cơ chế thuận lợi nhất hiện tại VN theo NĐ 135/2024/NĐ-CP. Khác với FIT cũ (giá cố định thấp), Net Metering tính theo giá điện thực tế. Cần đăng ký hợp đồng mua bán 2 chiều với Điện lực địa phương, lắp công tơ 2 chiều.',
+   example:'Tháng 7 (nắng tốt):\n• Solar: 1.200 kWh; Dùng: 800 kWh\n• Xuất lưới: 400 kWh; Nhập: 0\n• Hóa đơn: -400kWh × 2.900đ = −1.160.000đ\n(EVN trả lại hoặc trừ tháng sau)\n\nTháng 12 (ít nắng):\n• Solar: 700 kWh; Dùng: 800 kWh\n• Phải trả: 100kWh × 2.900đ = 290.000đ',
+   impacts:[{dir:'up',desc:'EP cao → Net Metering càng có lợi, điện dư hoàn trả theo giá cao'},{dir:'dn',desc:'Nếu FIT khôi phục với giá tốt → có thể xem xét chuyển sang FIT'}],
+   tags:['Doanh thu','Pháp lý','NĐ 135/2024'],ref:'NĐ 135/2024/NĐ-CP'},
+
+  {id:'omc',cat:'Chi phí',name:'Chi phí O&M',sym:'C_om',
+   def:'Operation & Maintenance Cost — Chi phí vận hành và bảo trì hàng năm: bảo trì định kỳ, vệ sinh tấm pin, bảo hiểm tài sản, và thay thế thiết bị.',
+   formula:'C_om(y) = C_maint + C_ins\n         + C_inv_thay (nếu y = năm thay)\nC_inv_thay = N_inv × Đơn_giá_inv',
+   detail:'O&M thực tế VN: Bảo trì: 1–2 tr.đ/kWp/năm. Vệ sinh: 200–500K/lần, 2–4 lần/năm. Bảo hiểm: 0,2–0,5% CAPEX/năm. Inverter thay năm 12–15 với giá ~70% inverter mới (giá thiết bị giảm theo thời gian).',
+   example:'10 kWp, CAPEX=120 tr.đ:\n• O&M thường niên: 2.500.000 đ/năm (2,1%)\n• Năm 12: + Thay inverter 12.000.000 đ\n• O&M năm 12: 14.500.000 đ\n• Tổng O&M 25 năm: ~74.500.000 đ\n(=62% CAPEX — đáng kể!)',
+   impacts:[{dir:'up',desc:'O&M thấp → CF ròng cao hơn, hoàn vốn nhanh hơn'},{dir:'dn',desc:'Bỏ bê bảo trì → PR giảm, mất doanh thu nhiều hơn chi phí tiết kiệm'}],
+   tags:['Vận hành','Chi phí'],ref:'IRENA O&M Guidelines'},
+
+  {id:'payback',cat:'Chỉ số tài chính',name:'Hoàn vốn giản đơn (PB)',sym:'PB',
+   def:'Simple Payback Period — Số năm để tổng dòng tiền dương tích lũy hoàn đủ vốn tự có ban đầu. Đơn giản, dễ giải thích cho khách hàng.',
+   formula:'PB = năm y* khi: CUM(y*) ≥ 0\nNội suy chính xác:\nPB = (y*−1) + |CUM(y*−1)| / CF(y*)\n\nVí dụ: CUM(6)=−5tr, CF(7)=42tr\nPB = 6 + 5/42 = 6.12 năm',
+   detail:'Benchmark VN 2024: <6 năm=Xuất sắc | 6–9=Tốt | 9–13=Chấp nhận | >13=Cần xem xét. Hạn chế: không tính giá trị thời gian của tiền → dùng DPB và IRR cho cái nhìn đầy đủ hơn.',
+   example:'10 kWp, CAPEX=120tr, HCM, EP₀=2.900đ:\nNăm 1 CF: 35.6tr | CUM: -84.4\nNăm 2 CF: 37.5tr | CUM: -46.9\nNăm 3 CF: 39.4tr | CUM: -7.5\nNăm 4 CF: 41.4tr | CUM: +33.9\n→ PB = 3 + 7.5/41.4 = 3.18 năm\n(Rất tốt! Mái Nam, PSH cao)',
+   impacts:[{dir:'up',desc:'PSH cao, EP cao, CAPEX thấp → PB ngắn, dự án hấp dẫn'},{dir:'dn',desc:'PB dài → Rủi ro thay đổi chính sách trước khi hoàn vốn tăng'}],
+   tags:['Chỉ số','Hoàn vốn'],ref:'CFA Institute'},
+
+  {id:'dpb',cat:'Chỉ số tài chính',name:'Hoàn vốn chiết khấu (DPB)',sym:'DPB',
+   def:'Discounted Payback Period — Như PB nhưng dùng dòng tiền đã chiết khấu về giá trị hiện tại. Thận trọng và chính xác hơn. DPB luôn ≥ PB.',
+   formula:'CF_disc(y) = CF(y) / (1+WACC)^y\nDPB = năm y* khi Σ CF_disc(0..y*) ≥ 0\n\nVới WACC=8%:\n100tr nhận sau 10 năm = 46.3tr hiện tại\n→ DPB tính toán dè dặt hơn PB',
+   detail:'DPB thường dài hơn PB từ 1–3 năm tùy WACC. Các ngân hàng và nhà đầu tư chuyên nghiệp ưa dùng DPB hơn PB. Nếu DPB > tuổi thọ dự án → NPV < 0 → không nên đầu tư.',
+   example:'So sánh PB vs DPB (WACC=8%):\nCùng 10 kWp, CAPEX=120tr, HCM:\n• PB = 3.2 năm (không chiết khấu)\n• DPB ≈ 4.5 năm (có chiết khấu)\nChênh 1.3 năm = chi phí thời gian chờ\n\nNếu WACC=12%: DPB ≈ 5.5 năm',
+   impacts:[{dir:'up',desc:'WACC thấp → DPB gần PB, ít phạt vì chi phí chờ'},{dir:'dn',desc:'WACC cao → DPB dài hơn PB rất nhiều, phản ánh đúng chi phí cơ hội vốn'}],
+   tags:['Chỉ số','Hoàn vốn','WACC'],ref:'CFA Institute / Damodaran'},
+
+  {id:'irr',cat:'Chỉ số tài chính',name:'IRR — Tỷ suất hoàn vốn nội bộ',sym:'IRR',
+   def:'Internal Rate of Return — Tỷ lệ chiết khấu làm cho NPV=0. Là lợi suất thực của vốn tự có đầu tư vào dự án. So sánh với WACC để quyết định đầu tư.',
+   formula:'Tìm IRR = r* sao cho:\nΣ [CF(y) / (1+r*)^y] = 0\nvới y = 0..N\n\nQuyết định:\nIRR > WACC → NPV > 0 → ĐẦU TƯ\nIRR < WACC → NPV < 0 → KHÔNG ĐẦU TƯ',
+   detail:'Benchmark VN: >15%=Xuất sắc | 10–15%=Tốt | 8–10%=Đạt | <8%=Dưới kỳ vọng. Đòn bẩy tài chính: nếu IRR dự án > lãi suất vay → vay làm tăng IRR equity (đòn bẩy dương).',
+   example:'So sánh Solar vs gửi ngân hàng:\n• Gửi NH: 6%/năm (ổn định, không rủi ro)\n• Solar tốt: IRR 12–16%/năm\n→ Solar vượt trội rõ ràng!\n\nVới đòn bẩy (vay 70%, lãi 9%):\nIRR dự án = 11% > lãi vay 9%\n→ IRR equity = 14–16% (đòn bẩy dương!)',
+   impacts:[{dir:'up',desc:'EP cao, CAPEX thấp, PSH tốt → IRR tăng theo tất cả 3 hướng'},{dir:'dn',desc:'Lãi vay > IRR dự án → Đòn bẩy âm, vay làm giảm IRR equity'}],
+   tags:['Chỉ số','IRR','CFA'],ref:'CFA Institute / Damodaran'},
+
+  {id:'npv',cat:'Chỉ số tài chính',name:'NPV — Giá trị hiện tại thuần',sym:'NPV',
+   def:'Net Present Value — Tổng giá trị hiện tại của tất cả dòng tiền. NPV > 0 = dự án tạo thêm giá trị so với để tiền gửi ngân hàng với lãi suất = WACC.',
+   formula:'NPV = Σ [CF(y) / (1+WACC)^y]\nvới y = 0, 1, 2, ..., N\n\nCF(0) = −Vốn_tự_có (âm)\nCF(y>0) = dòng tiền hàng năm (dương)',
+   detail:'NPV là thước đo chính xác nhất về giá trị tuyệt đối của dự án. WACC ảnh hưởng lớn: WACC=6%: NPV≈+140tr | WACC=8%: NPV≈+100tr | WACC=12%: NPV≈+40tr (cùng 10kWp, HCM).',
+   example:'NPV=+100 triệu đồng nghĩa là:\n→ Dự án Solar đem lại thêm 100tr so với\n   gửi 120tr vào ngân hàng lãi 8%/năm\n\nHay: dự án này đáng giá:\n120tr (đầu tư) + 100tr (NPV) = 220tr tổng giá trị hiện tại',
+   impacts:[{dir:'up',desc:'WACC thấp, EP tăng nhanh, tuổi thọ dài → NPV tăng'},{dir:'dn',desc:'WACC cao → NPV giảm mạnh, có thể âm dù hoàn vốn trông ổn'}],
+   tags:['Chỉ số','NPV','CFA'],ref:'CFA Institute / Damodaran'},
+
+  {id:'lcoe',cat:'Chỉ số tài chính',name:'LCOE — Chi phí điện quy dẫn',sym:'LCOE',
+   def:'Levelized Cost of Energy — Chi phí trung bình sản xuất 1 kWh điện trong toàn bộ vòng đời. Dùng so sánh Solar với các nguồn điện khác.',
+   formula:'LCOE = (CAPEX + Σ C_om(y)) / Σ E(y)\n\nVí dụ 10 kWp, HCM:\nTử: 120tr + 25×2.5tr = 182.5tr\nMẫu: ≈ 290.000 kWh (25 năm)\nLCOE = 182.5M/290.000 ≈ 629 đ/kWh',
+   detail:'LCOE Solar VN 2024: ~600–1.500 đ/kWh. So sánh: Điện lưới: 2.700–3.500 đ | Điện than: ~1.200–1.800 đ | Điện gió: ~1.500–2.500 đ. Solar có LCOE thấp nhất trong mọi nguồn điện mới tại VN.',
+   example:'So sánh 2 địa điểm, 10 kWp:\n• HCM (PSH=5.0):\n  LCOE = 120tr/285.000kWh = 421 đ/kWh\n  LCOE/EP = 421/2900 = 14.5% (tiết kiệm 85%!)\n• HN (PSH=3.5):\n  LCOE = 120tr/199.500kWh = 602 đ/kWh\n  Vẫn rất thấp so với giá lưới!',
+   impacts:[{dir:'up',desc:'CAPEX thấp, PSH cao, tuổi thọ dài → LCOE giảm mạnh'},{dir:'dn',desc:'O&M cao, δ lớn, CAPEX cao → LCOE tăng dần qua năm'}],
+   tags:['Chỉ số','IEA','IRENA','NREL'],ref:'IEA / IRENA / NREL'},
+
+  {id:'wacc',cat:'Tài chính',name:'WACC / Tỷ lệ chiết khấu',sym:'WACC',
+   def:'Weighted Average Cost of Capital — Chi phí vốn bình quân gia quyền. Ngưỡng lợi suất tối thiểu mà dự án cần đạt. Nếu IRR > WACC thì NPV > 0.',
+   formula:'WACC = Ke×(E/V) + Kd×(D/V)×(1−T)\nKe = chi phí vốn CSH\nKd = lãi suất vay\nE/V, D/V = tỷ trọng vốn\nT = thuế CIT\n\nHộ GĐ đơn giản:\nWACC ≈ lãi tiết kiệm (6–8%)',
+   detail:'VN 2024: Hộ GĐ: WACC=6–8% (lãi tiết kiệm). SME: WACC=10–15%. Dự án rủi ro cao: WACC=15–20%. Tăng WACC = đặt tiêu chuẩn cao hơn cho dự án.',
+   example:'So sánh với gửi tiết kiệm:\nNếu WACC=7% và IRR=12%:\n→ Solar vượt trội gửi ngân hàng 5%/năm!\n\nNếu WACC=7% và IRR=6%:\n→ Gửi ngân hàng tốt hơn Solar\n→ NPV âm → không nên đầu tư',
+   impacts:[{dir:'up',desc:'WACC cao → Yêu cầu cao hơn, chỉ dự án thực sự tốt mới vượt qua'},{dir:'dn',desc:'WACC thấp (lãi suất thấp) → Nhiều dự án Solar trở nên khả thi hơn'}],
+   tags:['Tài chính','WACC'],ref:'CFA Institute / Damodaran'},
+
+  {id:'loan',cat:'Tài chính',name:'Vốn vay & PMT (Annuity)',sym:'PMT',
+   def:'Sử dụng vốn vay ngân hàng để tài trợ một phần CAPEX. Trả nợ đều hàng năm theo phương pháp annuity (PMT cố định gồm cả gốc và lãi).',
+   formula:'PMT = Loan × r × (1+r)^n\n       ─────────────────────\n         (1+r)^n − 1\nr = lãi suất/năm; n = kỳ hạn\n\nDư nợ cuối năm y:\nBal(y) = Bal(y−1)×(1+r) − PMT',
+   detail:'Gói vay Solar VN 2024: Vietcombank Green: 7,5–8,5% | BIDV: 8–9% | Agribank: 8,5–9,5%. Kỳ hạn 5–10 năm. Tỷ lệ vay tối đa ~80% CAPEX. Đòn bẩy dương khi IRR dự án > lãi vay.',
+   example:'500 kWp, CAPEX=10 tỷ, vay 70% @ 9%, 7 năm:\nLoan=7 tỷ\nPMT = 7B×0.09×(1.09)^7/[(1.09)^7−1]\n    ≈ 1.391 tỷ/năm\nTổng gốc+lãi = 9.74 tỷ\nTổng lãi = 2.74 tỷ\nIRR equity (sau trả nợ) cao hơn IRR dự án!',
+   impacts:[{dir:'up',desc:'Lãi suất thấp, kỳ hạn dài → PMT nhỏ, CF ròng lớn hơn'},{dir:'dn',desc:'Lãi suất > IRR dự án → Đòn bẩy âm, vay làm giảm IRR equity'}],
+   tags:['Tài chính','Ngân hàng','Đòn bẩy'],ref:'Standard Annuity Formula'},
+
+  {id:'co2',cat:'Môi trường',name:'CO₂ giảm phát thải',sym:'CO₂(y)',
+   def:'Lượng CO₂ không phát thải vào khí quyển mỗi năm nhờ thay thế điện lưới (than/khí) bằng điện mặt trời.',
+   formula:'CO₂(y) = E(y) × EF / 1000\nEF = 0.812 kgCO₂/kWh (MONRE 2023)\n\nCO₂ tích lũy 25 năm:\n= Σ CO₂(y) ≈ EF/1000 × Σ E(y)',
+   detail:'EF VN theo MONRE: 2020: 0.857 | 2021: 0.782 | 2022: 0.805 | 2023: 0.812 kgCO₂/kWh. EF giảm dần khi lưới xanh hóa. 1 tấn CO₂ ≈ 45 cây xanh trưởng thành hấp thụ 1 năm.',
+   example:'10 kWp tại TP.HCM:\nNăm 1: CO₂ = 13.140kWh × 0.812/1000\n            = 10.67 tấn CO₂\nTổng 25 năm ≈ 221 tấn CO₂\n= Trồng 9.945 cây xanh\n= 228 chuyến bay HCM–HN tiết kiệm\n= Lái xe 1.116.000 km tương đương',
+   impacts:[{dir:'up',desc:'EF cao (lưới điện nhiều than) → Lợi ích môi trường lớn hơn'},{dir:'dn',desc:'EF giảm dần khi VN xanh hóa → Lợi ích CO₂ giảm, nhưng Solar vẫn có lợi'}],
+   tags:['Môi trường','ESG','MONRE 2023'],ref:'MONRE 2023 / EPA'},
+
+  {id:'carbon',cat:'Môi trường',name:'Tín chỉ carbon (VCU)',sym:'V_carbon',
+   def:'Chứng chỉ đại diện 1 tấn CO₂ giảm phát thải được xác nhận bởi bên thứ ba (VCS, Gold Standard). Có thể bán trên thị trường carbon tạo doanh thu bổ sung.',
+   formula:'V_carbon = Σ CO₂(y) × P_C(USD/tCO₂) × FX\n\nGiá 2024:\n• VN tự nguyện: ~3–8 USD/tCO₂\n• Châu Âu ETS: ~60–90 EUR/tCO₂\n• Mục tiêu VN 2035: ~50+ USD/tCO₂',
+   detail:'ETS bắt buộc VN theo NĐ 06/2022, dự kiến vận hành 2028. Hiện chỉ có thị trường tự nguyện. Dự án >500 kWp có thể đăng ký gộp (program of activities) với VCS/Gold Standard.',
+   example:'Dự án 500 kWp:\nCO₂/năm ≈ 535 tấn\n25 năm ≈ 11.050 tấn\n\n@ 5 USD/tCO₂:\nV = 11.050 × 5 × 25.000 = 1.38 tỷ đ\n\n@ 20 USD/tCO₂ (tương lai):\nV = 5.52 tỷ đồng!',
+   impacts:[{dir:'up',desc:'Giá carbon tăng toàn cầu → Doanh thu tín chỉ ngày càng hấp dẫn'},{dir:'dn',desc:'ETS VN chưa vận hành → Hiện là tiềm năng, không đưa vào IRR chính'}],
+   tags:['Môi trường','ESG','Carbon'],ref:'NĐ 06/2022/NĐ-CP / Verra VCS'}
+];
+
+// ─── GLOSSARY LOGIC ───────────────────────────────────────────────────────────
+var curTerm=null;
+function buildGloList(filter){
+  filter=filter||'';
+  var cats={};
+  for(var i=0;i<GLO.length;i++){
+    var t=GLO[i];
+    var q=filter.toLowerCase();
+    var ok=!q||t.name.toLowerCase().indexOf(q)>=0||t.sym.toLowerCase().indexOf(q)>=0||
+           t.def.toLowerCase().indexOf(q)>=0||(t.tags||[]).join(' ').toLowerCase().indexOf(q)>=0;
+    if(!ok)continue;
+    if(!cats[t.cat])cats[t.cat]=[];
+    cats[t.cat].push(t);
+  }
+  var html='';
+  var catNames=Object.keys(cats);
+  for(var ci=0;ci<catNames.length;ci++){
+    html+='<div class="glo-cat-hdr">'+catNames[ci]+'</div>';
+    var terms=cats[catNames[ci]];
+    for(var ti=0;ti<terms.length;ti++){
+      var tt=terms[ti];
+      var nm=tt.name.split('—')[0].split('(')[0].trim();
+      html+='<div class="glo-item'+(curTerm&&curTerm.id===tt.id?' active':'')+'" onclick="showTerm(\''+tt.id+'\')">'+
+            '<span>'+nm+'</span><span class="gsym">'+tt.sym+'</span></div>';
+    }
+  }
+  if(!html)html='<div style="padding:1rem;font-size:12px;color:rgba(255,255,255,.4);text-align:center">Không tìm thấy</div>';
+  document.getElementById('gloList').innerHTML=html;
+}
+function filterGlo(){buildGloList(document.getElementById('gloSearch').value);}
+function showTerm(id){
+  for(var i=0;i<GLO.length;i++){if(GLO[i].id===id){curTerm=GLO[i];break;}}
+  if(!curTerm)return;
+  buildGloList(document.getElementById('gloSearch').value);
+  var impHtml='';
+  var imps=curTerm.impacts||[];
+  for(var ii=0;ii<imps.length;ii++){
+    var im=imps[ii];
+    impHtml+='<div class="gimp"><div class="dir '+(im.dir==='up'?'dir-up':'dir-dn')+'">'+(im.dir==='up'?'↑ Tăng làm':'↓ Giảm làm')+'</div><div class="desc">'+im.desc+'</div></div>';
+  }
+  var tagsHtml='';
+  var tags=curTerm.tags||[];
+  for(var tgi=0;tgi<tags.length;tgi++)tagsHtml+='<span class="gtag">'+tags[tgi]+'</span>';
+  var exHtml=curTerm.example?'<div class="gsec"><h4>Ví dụ minh họa</h4><div class="gexample"><strong>Ví dụ thực tế</strong>'+curTerm.example.replace(/\n/g,'<br>')+'</div></div>':'';
+  var refHtml=curTerm.ref?'<div class="gref">📚 Nguồn: '+curTerm.ref+'</div>':'';
+  document.getElementById('gloContent').innerHTML=
+    '<div class="glo-term-hdr"><div class="glo-term-title">'+curTerm.name+'</div><div class="glo-term-sym">'+curTerm.sym+'</div></div>'+
+    '<div class="gsec"><h4>Định nghĩa</h4><p>'+curTerm.def+'</p></div>'+
+    '<div class="gsec"><h4>Công thức tính</h4><div class="gformula">'+curTerm.formula+'</div></div>'+
+    '<div class="gsec"><h4>Chi tiết & Thực tế Việt Nam</h4><p>'+curTerm.detail.replace(/\n/g,'<br>')+'</p></div>'+
+    exHtml+
+    '<div class="gsec"><h4>Ảnh hưởng đến dự án</h4><div class="gimpact">'+impHtml+'</div></div>'+
+    '<div class="gsec"><h4>Phân loại</h4><div class="gtags">'+tagsHtml+'</div></div>'+
+    refHtml;
+}
+
+
+
+
+// ─── DESIGN PROPOSAL ─────────────────────────────────────────────────────────
+function updateDesign(){
+  var cap=gv('cap');
+  if(!cap||cap<=0){
+    document.getElementById('designContent').innerHTML=
+      '<div style="text-align:center;padding:2rem;color:var(--text3)"><div style="font-size:28px;margin-bottom:8px">⚡</div><div style="font-weight:600;color:var(--navy)">Nhập công suất ở tab Dự án để xem đề xuất thiết kế</div></div>';
+    return;
+  }
+
+  var panelWp  = parseInt(document.getElementById('d_panelWp').value)||445;
+  var cableMm  = parseInt(document.getElementById('d_cableType').value)||6;
+  var dist     = gv('d_dist')||15;
+  var mountType= document.getElementById('d_mount').value||'roof_flat';
+  var invConf  = document.getElementById('d_invConf').value||'string';
+  var invOC    = parseFloat(document.getElementById('d_invOC').value)||1.1;
+  var sysType  = document.getElementById('sysType').value||'ongrid';
+
+  // ══ TÍNH TOÁN TẤM PIN ════════════════════════════════════════════════════
+  // Số tấm = ceil(kWp×1000 / Wp), làm tròn lên bội 2 (thuận lắp hàng)
+  var numPanels = Math.ceil(Math.ceil((cap*1000)/panelWp)/2)*2;
+  var actualCapKwp = (numPanels*panelWp)/1000;
+
+  // Diện tích 1 tấm theo Wp (thực tế thị trường)
+  // 350-400Wp: ~1.96m²  |  401-500Wp: ~2.15m²  |  501-650Wp: ~2.56m²  |  651-800Wp: ~2.90m²
+  var m2perPanel;
+  if(panelWp<=400)      m2perPanel=1.96;
+  else if(panelWp<=500) m2perPanel=2.15;
+  else if(panelWp<=650) m2perPanel=2.56;
+  else                  m2perPanel=2.90;
+
+  var panelArea = numPanels * m2perPanel;
+  // Diện tích mái cần = panelArea × hệ số khoảng cách (1.25 mái bằng; 1.15 mái dốc/ground)
+  var roofFactor = (mountType==='roof_flat'||mountType==='ground') ? 1.25 : 1.15;
+  var roofArea   = panelArea * roofFactor;
+
+  // ══ TÍNH TOÁN STRING & INVERTER ══════════════════════════════════════════
+  // Số tấm/string theo Vmp:
+  //  - Vmp ≈ Wp/210 (ước lượng thực tế)
+  //  - String voltage mục tiêu: 600–1000V
+  //  - 350-400Wp → Vmp≈37-40V → 16-20 tấm/string (target 650-750V)
+  //  - 401-500Wp → Vmp≈40-45V → 14-18 tấm/string
+  //  - 501-650Wp → Vmp≈46-52V → 12-16 tấm/string
+  //  - 651-800Wp → Vmp≈53-60V → 10-14 tấm/string
+  var panelsPerString;
+  if(invConf==='micro'){
+    panelsPerString=1;
+  } else {
+    if(panelWp<=400)      panelsPerString=18;
+    else if(panelWp<=500) panelsPerString=16;
+    else if(panelWp<=650) panelsPerString=14;
+    else                  panelsPerString=12;
+  }
+  var numStrings = Math.ceil(numPanels/panelsPerString);
+
+  // String inverter sizing logic (thực tế thị trường VN)
+  var numInv=1, invUnitKw=0;
+  if(invConf==='string'){
+    if(cap<=5)       {numInv=1; invUnitKw=5;}
+    else if(cap<=10) {numInv=1; invUnitKw=10;}
+    else if(cap<=15) {numInv=1; invUnitKw=15;}
+    else if(cap<=20) {numInv=2; invUnitKw=10;}
+    else if(cap<=30) {numInv=2; invUnitKw=15;}
+    else if(cap<=50) {numInv=2; invUnitKw=25;}
+    else if(cap<=100){numInv=Math.ceil(cap/50); invUnitKw=50;}
+    else if(cap<=500){numInv=Math.ceil(cap/100); invUnitKw=100;}
+    else             {numInv=Math.ceil(cap/250); invUnitKw=250;}
+  } else if(invConf==='central'){
+    if(cap<=250)     {numInv=1; invUnitKw=Math.ceil(cap*invOC/25)*25;}
+    else if(cap<=500){numInv=1; invUnitKw=500;}
+    else             {numInv=Math.ceil(cap/500); invUnitKw=500;}
+  } else { // micro
+    numInv=numPanels;
+    invUnitKw=Math.ceil(panelWp/1000*invOC*100)/100; // Wp→kW×OC, làm tròn 0.01
+  }
+  // Kiểm tra hệ số DC/AC: nên trong khoảng 1,05–1,35
+  var dcAcRatio = (numInv>0&&invUnitKw>0) ? actualCapKwp/(numInv*invUnitKw) : 0;
+
+  // ══ CÁP DC ════════════════════════════════════════════════════════════════
+  // Cáp DC: mỗi string = 2 sợi (dương + âm) × khoảng cách tấm→inverter
+  // Thêm 10% dự phòng uốn/nối
+  var cableDC_m   = Math.round(numStrings * 2 * dist * 1.1);
+  var cableDC_roll= Math.ceil(cableDC_m/100);
+
+  // ══ CÁP AC ════════════════════════════════════════════════════════════════
+  // Cáp AC: inverter → tủ hòa lưới/MSB, ước tính 60% khoảng cách DC
+  // Tiết diện cáp AC tự động theo công suất
+  var cableAC_m  = Math.round(dist * 0.6 * numInv * 1.1);
+  var cableAC_mm;
+  if(cap<=10)       cableAC_mm=4;
+  else if(cap<=25)  cableAC_mm=6;
+  else if(cap<=50)  cableAC_mm=10;
+  else if(cap<=100) cableAC_mm=16;
+  else if(cap<=250) cableAC_mm=35;
+  else              cableAC_mm=50;
+
+  // ══ KHUNG GIÁ ĐỠ ═════════════════════════════════════════════════════════
+  var mountDesc='', mountQty='';
+  if(mountType==='roof_hook'){
+    var hooks = numPanels*4;  // 4 hook / tấm
+    var rail  = Math.ceil(numPanels*1.2); // mét rail nhôm (2 thanh/tấm × ~0.6m)
+    mountDesc='Hook nhôm mái ngói';
+    mountQty = hooks+' cái hook + '+rail+' m rail nhôm';
+  } else if(mountType==='roof_flat'){
+    var ballast = numPanels*4; // 4 quả/tấm ~15kg/quả
+    mountDesc='Ballast mái bằng (góc 10–15°)';
+    mountQty = numPanels+' bộ giá ballast + '+ballast+' quả bê tông (~'+Math.round(ballast*15)+'kg)';
+  } else if(mountType==='ground'){
+    var poles = Math.ceil(numPanels/4)*2;  // 2 cột/hàng 4 tấm
+    var rail_g= Math.ceil(numPanels*1.5);
+    mountDesc='Khung thép mạ kẽm ground-mount';
+    mountQty = poles+' cột + '+rail_g+' m thanh ngang';
+  } else {
+    mountDesc='Khung BIPV tường đứng';
+    mountQty = numPanels+' bộ giá tường';
+  }
+
+  // ══ THIẾT BỊ BẢO VỆ ══════════════════════════════════════════════════════
+  var mcbDC_A  = 15;  // 15A/string tiêu chuẩn
+  var mcbAC_A  = cap<=10?32:(cap<=50?63:(cap<=100?100:200));
+  var mcbAC_poles = 4; // 3P+N
+
+  // ══ BATTERY (Hybrid / Off-Grid) ═══════════════════════════════════════════
+  // Hybrid: dự phòng ~4h peak = actualCap × 0.5 × 4h → nhưng thực tế dùng 50% DOD LFP
+  // Off-Grid: dự phòng ~1 ngày không nắng = kWh/ngày / self-use
+  var batHtml='';
+  if(sysType==='hybrid'||sysType==='offgrid'){
+    var batCapKwh;
+    if(sysType==='hybrid'){
+      // Dự phòng 4 giờ ở 30% công suất → kWh = kWp × 0.3 × 4 / 0.9 (inverter eff)
+      batCapKwh = Math.round(actualCapKwp * 0.3 * 4 / 0.9);
+      batCapKwh = Math.max(batCapKwh, 5); // tối thiểu 5 kWh
+    } else {
+      // Off-grid: 1.5 ngày dự phòng, DOD 80%
+      // Giả sử tiêu thụ = sản lượng daily / 1 ngày × 1.5 ngày
+      var dailyKwh = actualCapKwp * 4.5 * 0.8; // PSH 4.5, PR 80%
+      batCapKwh = Math.round(dailyKwh * 1.5 / 0.8); // ÷DOD
+    }
+    // Chọn module LFP 48V (5.12kWh) hoặc 51.2V rack (5.12kWh)
+    var batModKwh = 5.12;
+    var batModQty = Math.ceil(batCapKwh/batModKwh);
+    var batVolt   = batCapKwh<=20 ? 48 : 51.2;
+    var backupH   = Math.round(batCapKwh*0.8/(actualCapKwp*0.3)); // giờ @ 30% load
+    batHtml='<div class="dcard"><div class="dcard-hdr"><span class="dico">🔋</span><h3>Pin lưu trữ (Battery)</h3><span class="dbadge">'+(sysType==='hybrid'?'HYBRID':'OFF-GRID')+'</span></div>'+
+      '<div class="drow"><span class="dk">Dung lượng thiết kế</span><span class="dv"><strong>'+batCapKwh+'</strong> kWh</span></div>'+
+      '<div class="drow"><span class="dk">Module LFP ('+batVolt+'V)</span><span class="dv">'+batModQty+' × '+batModKwh+' kWh</span></div>'+
+      '<div class="drow"><span class="dk">Tổng thực tế</span><span class="dv">'+fmtD(batModQty*batModKwh,1)+' kWh (DOD 80%: '+fmtD(batModQty*batModKwh*0.8,1)+'kWh khả dụng)</span></div>'+
+      '<div class="drow"><span class="dk">Dự phòng ước tính</span><span class="dv">~'+backupH+' giờ (tải 30% công suất)</span></div>'+
+      '<div class="dspec">✅ LFP (Lithium Iron Phosphate) — tuổi thọ 3.000–6.000 chu kỳ, an toàn nhiệt cao</div>'+
+      '</div>';
+  }
+
+  // ══ RENDER ════════════════════════════════════════════════════════════════
+  var dcAcColor = (dcAcRatio>=1.05&&dcAcRatio<=1.35)?'color:var(--green-dark)':'color:var(--red-dark)';
+  document.getElementById('designContent').innerHTML=
+    '<div class="design-grid">'+
+    // Tấm pin
+    '<div class="dcard"><div class="dcard-hdr"><span class="dico">☀</span><h3>Tấm pin Solar</h3><span class="dbadge">'+panelWp+'Wp/tấm</span></div>'+
+    '<div class="drow"><span class="dk">Số lượng tấm pin</span><span class="dv"><strong>'+numPanels+'</strong> tấm</span></div>'+
+    '<div class="drow"><span class="dk">Công suất mỗi tấm</span><span class="dv">'+panelWp+' Wp (mono PERC/TOPCon)</span></div>'+
+    '<div class="drow"><span class="dk">Tổng công suất DC</span><span class="dv">'+fmtKwp(actualCapKwp)+' kWp</span></div>'+
+    '<div class="drow"><span class="dk">Diện tích 1 tấm</span><span class="dv">~'+fmtD(m2perPanel,2)+' m²/tấm</span></div>'+
+    '<div class="drow"><span class="dk">Tổng diện tích tấm</span><span class="dv">~'+fmtD(panelArea,1)+' m²</span></div>'+
+    '<div class="drow"><span class="dk">Diện tích mái cần</span><span class="dv"><strong>~'+Math.round(roofArea)+'</strong> m²</span></div>'+
+    '<div class="dspec">📐 Cấu hình: '+numStrings+' string × '+panelsPerString+' tấm/string — tổng '+numPanels+' tấm thực lắp</div>'+
+    '</div>'+
+    // Inverter
+    '<div class="dcard"><div class="dcard-hdr"><span class="dico">🔌</span><h3>Inverter</h3><span class="dbadge">'+(invConf==='string'?'String':(invConf==='central'?'Central':'Micro'))+'</span></div>'+
+    '<div class="drow"><span class="dk">Số lượng inverter</span><span class="dv"><strong>'+numInv+'</strong> bộ</span></div>'+
+    '<div class="drow"><span class="dk">Công suất mỗi bộ</span><span class="dv">'+fmtD(invUnitKw,1)+' kW AC</span></div>'+
+    '<div class="drow"><span class="dk">Tổng công suất AC</span><span class="dv">'+fmtD(numInv*invUnitKw,1)+' kW</span></div>'+
+    '<div class="drow"><span class="dk">Hệ số DC/AC (clipping ratio)</span><span class="dv" style="'+dcAcColor+'"><strong>'+fmtD(dcAcRatio,3)+'×</strong> (tối ưu: 1,05–1,35)</span></div>'+
+    '<div class="drow"><span class="dk">Số string/inverter</span><span class="dv">'+(numInv>0?Math.ceil(numStrings/numInv):0)+' string/bộ (±1)</span></div>'+
+    '<div class="dspec">💡 Khuyến nghị: Huawei SUN2000, Sungrow SG, Growatt MAX, Fronius Symo</div>'+
+    '</div>'+
+    // Cáp
+    '<div class="dcard"><div class="dcard-hdr"><span class="dico">🔗</span><h3>Dây cáp & kết nối</h3><span class="dbadge">DC '+cableMm+'mm²</span></div>'+
+    '<div class="drow"><span class="dk">Cáp DC ('+cableMm+' mm²)</span><span class="dv"><strong>'+cableDC_m+'</strong> m (~'+cableDC_roll+' cuộn 100m)</span></div>'+
+    '<div class="drow"><span class="dk">Cáp AC ('+cableAC_mm+' mm²)</span><span class="dv"><strong>'+cableAC_m+'</strong> m</span></div>'+
+    '<div class="drow"><span class="dk">Đầu nối MC4</span><span class="dv">~'+(numStrings*4)+' cặp</span></div>'+
+    '<div class="drow"><span class="dk">Ống bảo vệ cáp (PVC/EMT)</span><span class="dv">~'+Math.round(cableDC_m*0.85)+' m</span></div>'+
+    '<div class="dspec">⚡ Cáp DC: PV1-F 1.5kVDC, chịu UV. Cáp AC: XLPE/PVC ≥0.6/1kV (IEC 60228)</div>'+
+    '</div>'+
+    '</div>'+
+    '<div class="design-grid-2">'+
+    // Khung giá đỡ
+    '<div class="dcard"><div class="dcard-hdr"><span class="dico">🏗</span><h3>Khung giá đỡ</h3><span class="dbadge">'+mountDesc+'</span></div>'+
+    '<div class="drow"><span class="dk">Loại khung</span><span class="dv">'+mountDesc+'</span></div>'+
+    '<div class="drow"><span class="dk">Vật tư / Chi tiết</span><span class="dv">'+mountQty+'</span></div>'+
+    '<div class="drow"><span class="dk">Diện tích mặt bằng</span><span class="dv">~'+Math.round(roofArea)+' m²</span></div>'+
+    '<div class="drow"><span class="dk">Hướng nghiêng đề xuất</span><span class="dv">'+(mountType==='roof_flat'?'10–15° hướng Nam':(mountType==='ground'?'Bằng vĩ độ ±5°':'Theo mái nhà'))+'</span></div>'+
+    '<div class="dspec">🔩 Vật liệu: Nhôm anodized 6005-T5 hoặc thép mạ kẽm nhúng nóng (ISO 1461)</div>'+
+    '</div>'+
+    // Tủ điện & bảo vệ
+    '<div class="dcard"><div class="dcard-hdr"><span class="dico">🛡</span><h3>Tủ điện & Thiết bị bảo vệ</h3><span class="dbadge">BOS</span></div>'+
+    '<div class="drow"><span class="dk">DC String combiner/MCB</span><span class="dv">'+numStrings+' × MCB DC '+mcbDC_A+'A (1 cái/string)</span></div>'+
+    '<div class="drow"><span class="dk">AC MCB chính</span><span class="dv">'+mcbAC_poles+'P '+mcbAC_A+'A (1 bộ/inverter)</span></div>'+
+    '<div class="drow"><span class="dk">Chống sét SPD</span><span class="dv">'+numInv+' × SPD DC Class II + AC Type 2</span></div>'+
+    '<div class="drow"><span class="dk">RCBO / ELCB chống dòng rò</span><span class="dv">1 × RCBO 30mA / 63A</span></div>'+
+    '<div class="dspec">📋 Tiêu chuẩn: IEC 62305 (chống sét), IEC 60947, TCVN 9207:2012</div>'+
+    '</div>'+
+    '</div>'+
+    // Summary bar
+    (batHtml?'<div class="design-grid-2">'+batHtml+
+    '<div class="dcard"><div class="dcard-hdr"><span class="dico">📊</span><h3>Tóm tắt hệ thống</h3><span class="dbadge">'+(sysType==='hybrid'?'HYBRID':'OFF-GRID')+'</span></div>'+
+    '<div class="drow"><span class="dk">Số tấm pin</span><span class="dv">'+numPanels+' × '+panelWp+'Wp = '+fmtKwp(actualCapKwp)+' kWp</span></div>'+
+    '<div class="drow"><span class="dk">Inverter/Hybrid</span><span class="dv">'+numInv+' × '+fmtD(invUnitKw,1)+' kW AC</span></div>'+
+    '<div class="drow"><span class="dk">Hệ số DC/AC</span><span class="dv" style="'+dcAcColor+'">'+fmtD(dcAcRatio,3)+'×</span></div>'+
+    '<div class="drow"><span class="dk">Cáp DC / AC</span><span class="dv">'+cableDC_m+'m ('+cableMm+'mm²) / '+cableAC_m+'m ('+cableAC_mm+'mm²)</span></div>'+
+    '</div></div>' :
+    '<div style="background:var(--navy);border-radius:var(--radius-lg);padding:.9rem 1.1rem;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:8px">'+
+    '<div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:JetBrains Mono,monospace">'+numPanels+'</div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">Tấm pin</div></div>'+
+    '<div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:JetBrains Mono,monospace">'+numInv+'</div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">Inverter</div></div>'+
+    '<div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:JetBrains Mono,monospace">'+cableDC_m+'m</div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">Cáp DC</div></div>'+
+    '<div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--gold);font-family:JetBrains Mono,monospace">'+Math.round(roofArea)+'m²</div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">Diện tích</div></div>'+
+    '<div style="text-align:center"><div style="font-size:20px;font-weight:700;'+(dcAcRatio>=1.05&&dcAcRatio<=1.35?'color:#9FE1CB':'color:#FFAAAA')+';font-family:JetBrains Mono,monospace">'+fmtD(dcAcRatio,2)+'×</div><div style="font-size:9px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.05em;margin-top:2px">DC/AC</div></div>'+
+    '</div>');
+}
+
+
+
+// ─── EXPORT FORMULAS WORKBOOK (kiểm tra backend) ─────────────────────────────
+function exportFormulas(){
+  if(typeof XLSX!=='undefined'){_doFormulas();}
+  else{
+    var s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload=function(){_doFormulas();};
+    document.head.appendChild(s);
+  }
+}
+
+function _doFormulas(){
+  var wb=XLSX.utils.book_new();
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // SHEET 1: TỔNG QUAN & THÔNG SỐ ĐẦU VÀO
+  // ══════════════════════════════════════════════════════════════════════════
+  var s1=[
+    ['GITT — SOLAR PROJECT ESTIMATION — KIỂM TRA CÔNG THỨC BACKEND'],
+    ['GLOBAL INVESTMENT TECHNOLOGY TRANSFER COMPANY LIMITED'],
+    ['Phiên bản: v3.1 | Chuẩn: IEC 61724, IEC 61215, TT 45/2013, NĐ 135/2024'],
+    [''],
+    ['═══ A. THÔNG SỐ ĐẦU VÀO (từ giao diện) ═══'],
+    ['Tên tham số','Ký hiệu','Giá trị hiện tại','Đơn vị','Ràng buộc','Ghi chú'],
+    ['Công suất lắp đặt','P_peak',gv('cap'),'kWp','0.5–5000','Tổng Wp của tất cả tấm pin'],
+    ['Giờ nắng đỉnh','PSH',gv('psh'),'h/ngày','1–7','Peak Sun Hours bình quân năm'],
+    ['Performance Ratio','PR',gv('pr')/100,'%','60–95%','Hiệu suất tổng hợp hệ thống'],
+    ['Hướng lắp đặt','f_orient',parseFloat(document.getElementById('orient').value),'','0.70–1.00','Hệ số hiệu chỉnh theo hướng'],
+    ['Góc nghiêng','tilt',gv('tilt'),'°','0–90','Góc so với phương nằm ngang'],
+    ['Hệ số góc tilt','f_tilt','=tiltFactor(tilt)','','0.90–1.00','Tính từ góc nghiêng'],
+    ['Suy giảm công suất/năm','δ',gv('deg')/100,'%/năm','0.1–3%','IEC 61215: mono PERC ≤0.7%/năm'],
+    ['Tuổi thọ dự án','N',gv('lifespan'),'năm','5–40','Thời gian phân tích'],
+    ['Giá điện ban đầu','EP₀',gv('ep'),'đ/kWh','500–8000','Giá EVN thực tế'],
+    ['Tỷ lệ tự tiêu thụ','selfUse',gv('selfUse')/100,'%','0–100%','Phần dùng trực tiếp'],
+    ['Cơ chế bán điện','fitMode',document.getElementById('fitMode').value,'','netmeter/fit/spot','NĐ 135/2024'],
+    ['Giá FIT/Spot','FIT_P',gv('fitP'),'đ/kWh','0–5000','Chỉ dùng khi không Net Metering'],
+    ['Tăng giá điện/năm','esc',gv('esc')/100,'%/năm','0–20%','Lịch sử VN ~7%/năm'],
+    ['Vật tư thiết bị','C_mat',getMat().mat,'VNĐ','≥0','Tổng vật tư'],
+    ['Nhân công & DV','C_lab',getMat().lab,'VNĐ','≥0','Nhân công + dịch vụ'],
+    ['Cấp phép & ĐN','C_per',getMat().per,'VNĐ','≥0','Cấp phép + đấu nối'],
+    ['Trợ cấp','sub',getMat().sub,'VNĐ','≥0','Khấu trừ thẳng vào CAPEX'],
+    ['CAPEX (net)','CAPEX',getMat().total,'VNĐ','≥0','= C_mat+C_lab+C_per−sub'],
+    ['Bảo trì/năm','C_maint',gv('maint'),'VNĐ/năm','≥0',''],
+    ['Bảo hiểm/năm','C_ins',gv('annIns'),'VNĐ/năm','≥0',''],
+    ['Năm thay inverter','inv_rep',gv('invRep'),'năm','0=không thay',''],
+    ['Chi phí thay inverter','inv_cost',gv('iQty')*gv('iPrice'),'VNĐ','≥0','Số bộ × Đơn giá'],
+    ['Sử dụng vốn vay','useLoan',document.getElementById('useLoan').checked?'CÓ':'KHÔNG','','',''],
+    ['Tỷ lệ vay','loan_ratio',gv('loanRatio')/100,'%','0–100%','% CAPEX được vay'],
+    ['Lãi suất vay','r_loan',gv('loanRate')/100,'%/năm','0–30%',''],
+    ['Kỳ hạn vay','n_loan',gv('loanTerm'),'năm','1–25',''],
+    ['Kỳ khấu hao','N_depr',gv('deprYr'),'năm','1–25','TT 45/2013: TB 7–10 năm'],
+    ['Thuế CIT','CIT',gv('cit')/100,'%','0–30%','0% cá nhân, 20% DN'],
+    ['Tỷ lệ chiết khấu','WACC',gv('discRate')/100,'%','1–30%','Chi phí vốn bình quân'],
+    ['Hệ số phát thải CO₂','EF',gv('co2Factor'),'kgCO₂/kWh','','MONRE 2023: 0.812'],
+    ['Giá tín chỉ carbon','P_carbon',gv('carbonPrice'),'USD/tCO₂','','Thị trường tự nguyện VN ~3-8 USD'],
+    ['Tỷ giá USD/VNĐ','FX',gv('usdRate'),'VNĐ/USD','',''],
+  ];
+  var ws1=XLSX.utils.aoa_to_sheet(s1);
+  ws1['!cols']=[{wch:30},{wch:12},{wch:20},{wch:12},{wch:18},{wch:40}];
+  // Header styles
+  XLSX.utils.book_append_sheet(wb,ws1,'1. Thông số đầu vào');
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // SHEET 2: CÔNG THỨC TÀI CHÍNH — CHI TIẾT
+  // ══════════════════════════════════════════════════════════════════════════
+  var r=getMat();
+  var CAPEX=r.total;
+  var useLoan=document.getElementById('useLoan').checked;
+  var loanAmt=useLoan?CAPEX*(gv('loanRatio')/100):0;
+  var eqInvest=CAPEX-loanAmt;
+  var rLoan=gv('loanRate')/100;
+  var nLoan=gv('loanTerm');
+  var annPMT=useLoan&&rLoan>0?loanAmt*rLoan*Math.pow(1+rLoan,nLoan)/(Math.pow(1+rLoan,nLoan)-1):0;
+  var fOrient=parseFloat(document.getElementById('orient').value);
+  var fTilt=tiltF(gv('tilt'));
+  var pr=gv('pr')/100;
+  var psh=gv('psh');
+  var cap=gv('cap');
+  var deg=gv('deg')/100;
+  var ep=gv('ep');
+  var esc=gv('esc')/100;
+  var self=gv('selfUse')/100;
+  var fitMode=document.getElementById('fitMode').value;
+  var fitP=gv('fitP');
+  var maint=gv('maint');
+  var annIns=gv('annIns');
+  var invRep=gv('invRep');
+  var invCost=gv('iQty')*gv('iPrice');
+  var lifespan=gv('lifespan');
+  var deprYr=gv('deprYr');
+  var cit=gv('cit')/100;
+  var wacc=gv('discRate')/100;
+  var co2f=gv('co2Factor');
+  var carbonP=gv('carbonPrice');
+  var fx=gv('usdRate');
+
+  var s2=[
+    ['═══ B. CÔNG THỨC TÀI CHÍNH — TOÀN BỘ BACKEND ═══'],[''],
+    ['B1. DIỆN TÍCH HỆ SỐ HIỆU CHỈNH','',''],
+    ['Hàm','Công thức','Giải thích'],
+    ['tiltF(t)','|t−15|≤5 → 1.00  |  ≤15 → 0.98  |  ≤25 → 0.95  |  >25 → 0.90','Góc tối ưu là 15° tại VN (vĩ độ 10–20°N)'],
+    ['Hướng (f_orient)','Nam=1.00 | ĐN/TN=0.97 | Đ/T=0.90 | ĐB/TB=0.80 | Bắc=0.70','Dựa trên mô phỏng PVGIS vĩ độ 10–20°N'],
+    [''],
+    ['B2. SẢN LƯỢNG ĐIỆN HÀNG NĂM'],
+    ['Chỉ số','Công thức','Kết quả năm 1','Kết quả năm 10','Kết quả năm 25'],
+    ['E(y) — sản lượng','= P_peak × PSH × 365 × PR × f_orient × f_tilt × (1−δ)^(y−1)',
+      Math.round(cap*psh*365*pr*fOrient*fTilt),
+      Math.round(cap*psh*365*pr*fOrient*fTilt*Math.pow(1-deg,9)),
+      Math.round(cap*psh*365*pr*fOrient*fTilt*Math.pow(1-deg,24))],
+    ['EP(y) — giá điện','= EP₀ × (1+esc)^(y−1) [đ/kWh]',
+      Math.round(ep),
+      Math.round(ep*Math.pow(1+esc,9)),
+      Math.round(ep*Math.pow(1+esc,24))],
+    [''],
+    ['B3. DOANH THU THEO CƠ CHẾ BÁN ĐIỆN'],
+    ['Cơ chế','Công thức doanh thu','Ghi chú'],
+    ['Net Metering (hiện hành)','Rev(y) = E(y) × EP(y)','Toàn bộ sản lượng × giá tiêu thụ. NĐ 135/2024'],
+    ['FIT (tạm dừng VN)','Rev(y) = E(y)×selfUse×EP(y) + E(y)×(1−selfUse)×FIT×(1+esc)^(y−1)','Phần tự dùng theo giá lưới, phần xuất theo giá FIT'],
+    ['Spot','Rev(y) = E(y)×selfUse×EP(y) + E(y)×(1−selfUse)×Spot×(1+esc)^(y−1)','Spot thường < giá lưới'],
+    ['Không bán','Rev(y) = E(y) × selfUse × EP(y)','Chỉ tính phần tự tiêu thụ'],
+    ['Cơ chế hiện tại (ứng dụng)',fitMode,'',''],
+    [''],
+    ['B4. CHI PHÍ O&M'],
+    ['Hạng mục','Công thức','Năm thường','Năm thay inverter (năm '+invRep+')'],
+    ['C_om(y)','= C_maint + C_ins [+ inv_cost nếu y=năm thay]',maint+annIns,invRep>0?maint+annIns+invCost:'N/A'],
+    ['C_maint','Nhập trực tiếp từ giao diện',maint,''],
+    ['C_ins','Nhập trực tiếp từ giao diện',annIns,''],
+    ['inv_cost','= Số bộ inverter × Đơn giá inverter',invCost,''],
+    [''],
+    ['B5. KHẤU HAO & THUẾ CIT'],
+    ['Hạng mục','Công thức','Giá trị'],
+    ['Depr(y)','= CAPEX / N_depr  nếu y ≤ N_depr; else 0',Math.round(CAPEX/deprYr)+' đ/năm ('+deprYr+' năm đầu)'],
+    ['EBIT(y)','= Rev(y) − C_om(y) − Depr(y)','Tính theo từng năm'],
+    ['Tax(y)','= MAX(0, EBIT(y)) × CIT%','CIT = '+Math.round(cit*100)+'%'],
+    ['Lưu ý CIT','Nếu EBIT < 0: Tax = 0 (không có hoàn thuế trong mô hình)',''],
+    [''],
+    ['B6. VỐN VAY & TRẢ NỢ ANNUITY'],
+    ['Hạng mục','Công thức','Giá trị tính toán'],
+    ['Vốn vay (Loan)','= CAPEX × loan_ratio',Math.round(loanAmt)+' VNĐ'],
+    ['Vốn tự có (Equity)','= CAPEX − Loan',Math.round(eqInvest)+' VNĐ'],
+    ['PMT (trả đều/năm)','= Loan × r × (1+r)^n / [(1+r)^n − 1]',Math.round(annPMT)+' VNĐ/năm'],
+    ['Lãi năm y','= Dư nợ đầu năm y × r','Giảm dần theo năm'],
+    ['Gốc trả năm y','= PMT − Lãi(y)','Tăng dần theo năm'],
+    ['Dư nợ cuối năm y','= Dư nợ đầu năm y × (1+r) − PMT','Về 0 sau năm '+nLoan],
+    ['Tổng gốc+lãi','= PMT × n_loan',Math.round(annPMT*nLoan)+' VNĐ'],
+    ['Tổng lãi vay','= PMT×n − Loan',Math.round(annPMT*nLoan-loanAmt)+' VNĐ'],
+    [''],
+    ['B7. DÒNG TIỀN VỐN TỰ CÓ'],
+    ['Hạng mục','Công thức','Ghi chú'],
+    ['CF(0) — năm đầu tư','= −Equity = −(CAPEX−Loan)',Math.round(-eqInvest)+' VNĐ'],
+    ['CF(y) — hàng năm','= Rev(y) − C_om(y) − Tax(y) − PMT','Dương khi tiết kiệm > chi phí'],
+    ['CUM(y) — tích lũy','= CUM(y−1) + CF(y); CUM(0) = −Equity','Dương khi đã hoàn vốn'],
+    ['CF_disc(y) — chiết khấu','= CF(y) / (1+WACC)^y','WACC = '+Math.round(wacc*100)+'%'],
+    [''],
+    ['B8. CHỈ SỐ TÀI CHÍNH'],
+    ['Chỉ số','Công thức','Giải thích','Benchmark VN 2024'],
+    ['PB (Payback)','Năm y* khi CUM(y*) ≥ 0; nội suy = (y*−1)+|CUM(y*−1)|/CF(y*)','Hoàn vốn giản đơn','<6n: Xuất sắc | 6-9n: Tốt | >13n: Xem xét lại'],
+    ['DPB','Tương tự PB nhưng dùng CF_disc(y)','Hoàn vốn chiết khấu','Thường dài hơn PB 1-3 năm'],
+    ['IRR','r* sao cho: Σ[CF(y)/(1+r*)^y] = 0, y=0..N; giải bằng binary search','Tỷ suất hoàn vốn nội bộ','>15%: Xuất sắc | 10-15%: Tốt | <8%: Dưới kỳ vọng'],
+    ['NPV','Σ[CF(y)/(1+WACC)^y], y=0..N','Giá trị hiện tại thuần','NPV>0: Nên đầu tư'],
+    ['ROI','Σ CF(y>0) / Equity × 100%','Tổng lợi nhuận không chiết khấu','300-800% cho dự án 25 năm là bình thường'],
+    ['LCOE','(CAPEX + Σ C_om(y)) / Σ E(y)','Chi phí điện quy dẫn','VN 2024: ~600-1500 đ/kWh'],
+    [''],
+    ['B9. MÔI TRƯỜNG & CARBON'],
+    ['Chỉ số','Công thức','Năm 1','Tổng 25 năm'],
+    ['CO₂(y) — tấn','= E(y) × EF / 1000; EF='+co2f+' kgCO₂/kWh',
+      (cap*psh*365*pr*fOrient*fTilt*co2f/1000).toFixed(2),
+      '~'+Math.round((function(){var s=0;for(var i=0;i<lifespan;i++)s+=cap*psh*365*pr*fOrient*fTilt*Math.pow(1-deg,i)*co2f/1000;return s;})())],
+    ['V_carbon (triệu đ)','= Σ CO₂(y) × P_carbon(USD) × FX','','Tiềm năng, chưa tính vào IRR chính'],
+  ];
+  var ws2=XLSX.utils.aoa_to_sheet(s2);
+  ws2['!cols']=[{wch:32},{wch:60},{wch:22},{wch:22},{wch:22}];
+  XLSX.utils.book_append_sheet(wb,ws2,'2. Công thức tài chính');
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // SHEET 3: CÔNG THỨC THIẾT KẾ
+  // ══════════════════════════════════════════════════════════════════════════
+  var panelWp_d=parseInt(document.getElementById('d_panelWp').value)||445;
+  var dist_d=gv('d_dist')||15;
+  var invConf_d=document.getElementById('d_invConf').value||'string';
+  var invOC_d=parseFloat(document.getElementById('d_invOC').value)||1.1;
+  var sysType_d=document.getElementById('sysType').value;
+  var cap_d=gv('cap');
+
+  var numPanels_d=Math.ceil(Math.ceil((cap_d*1000)/panelWp_d)/2)*2;
+  var actualCap_d=(numPanels_d*panelWp_d)/1000;
+  var m2pp_d=panelWp_d<=400?1.96:(panelWp_d<=500?2.15:(panelWp_d<=650?2.56:2.90));
+  var panelArea_d=numPanels_d*m2pp_d;
+  var roofFactor_d=(document.getElementById('d_mount').value==='roof_flat'||document.getElementById('d_mount').value==='ground')?1.25:1.15;
+  var roofArea_d=panelArea_d*roofFactor_d;
+  var pps_d=invConf_d==='micro'?1:(panelWp_d<=400?18:(panelWp_d<=500?16:(panelWp_d<=650?14:12)));
+  var numStr_d=Math.ceil(numPanels_d/pps_d);
+  var cableDC_d=Math.round(numStr_d*2*dist_d*1.1);
+  var cableAC_mm_d=cap_d<=10?4:(cap_d<=25?6:(cap_d<=50?10:(cap_d<=100?16:(cap_d<=250?35:50))));
+
+  var s3=[
+    ['═══ C. CÔNG THỨC THIẾT KẾ KỸ THUẬT ═══'],[''],
+    ['C1. TẤM PIN SOLAR'],
+    ['Tham số','Công thức','Giá trị tính toán','Ghi chú'],
+    ['Số tấm pin (numPanels)','= CEIL(CEIL(P_peak×1000 / Wp_tấm) / 2) × 2','= '+numPanels_d+' tấm','Làm tròn lên bội số 2 (thuận lắp hàng)'],
+    ['Công suất thực tế (kWp)','= numPanels × Wp_tấm / 1000','= '+actualCap_d.toFixed(3)+' kWp','Có thể > công suất nhập nếu làm tròn'],
+    ['Diện tích 1 tấm (m²)','350-400Wp → 1.96m² | 401-500 → 2.15m² | 501-650 → 2.56m² | >650 → 2.90m²','= '+m2pp_d.toFixed(2)+' m²/tấm','Dựa trên kích thước thực tế thị trường'],
+    ['Tổng diện tích tấm','= numPanels × m²/tấm','= '+panelArea_d.toFixed(1)+' m²',''],
+    ['Diện tích mái cần','= panelArea × roofFactor','= '+Math.round(roofArea_d)+' m²','mái bằng/ground: ×1.25 | mái dốc: ×1.15'],
+    [''],
+    ['C2. STRING & SỐ TẤM/STRING'],
+    ['Tham số','Công thức','Giá trị','Cơ sở thiết kế'],
+    ['Số tấm/string (pps)','Micro: 1 | 350-400Wp: 18 | 401-500Wp: 16 | 501-650Wp: 14 | >650Wp: 12','= '+pps_d,'Target string voltage 600-750V; Vmp≈Wp/200'],
+    ['Số string','= CEIL(numPanels / pps)','= '+numStr_d+' string',''],
+    ['Kiểm tra string voltage ước tính','≈ pps × (Wp / 200) V','≈ '+(pps_d*panelWp_d/200).toFixed(0)+' V','Chấp nhận 600-1000V (tùy inverter)'],
+    [''],
+    ['C3. INVERTER (String mode)'],
+    ['Công suất (kWp)','Số lượng','Công suất/bộ (kW)','Lý do chọn'],
+    ['≤5 kWp','1','5 kW','1 inverter đủ'],
+    ['≤10 kWp','1','10 kW',''],
+    ['≤15 kWp','1','15 kW',''],
+    ['≤20 kWp','2','10 kW','Dự phòng cụm'],
+    ['≤30 kWp','2','15 kW',''],
+    ['≤50 kWp','2','25 kW',''],
+    ['≤100 kWp','CEIL(cap/50)','50 kW',''],
+    ['≤500 kWp','CEIL(cap/100)','100 kW',''],
+    ['>500 kWp','CEIL(cap/250)','250 kW','Central mode phù hợp hơn'],
+    ['Hệ số DC/AC','= actualKwp / (numInv × invUnitKw)','Khuyến nghị 1.05–1.35','<1.0: Inverter quá lớn | >1.35: Clipping nhiều'],
+    [''],
+    ['C4. CÁP DC'],
+    ['Tham số','Công thức','Giá trị','Ghi chú'],
+    ['Tổng mét cáp DC','= numString × 2 × dist_inv × 1.1','= '+cableDC_d+' m','×2 (dương+âm) | ×1.1 dự phòng uốn/nối'],
+    ['Số cuộn 100m','= CEIL(cableDC / 100)','= '+Math.ceil(cableDC_d/100)+' cuộn',''],
+    ['Tiết diện DC (đã chọn)','Nhập thủ công','= '+parseInt(document.getElementById('d_cableType').value)+' mm²','4mm²≤10kWp | 6mm² tiêu chuẩn | 10mm²>50kWp | 16mm²>100kWp'],
+    [''],
+    ['C5. CÁP AC'],
+    ['Tham số','Công thức','Giá trị','Ghi chú'],
+    ['Tổng mét cáp AC','= ROUND(dist × 0.6) × numInv × 1.1','= '+Math.round(dist_d*0.6*1.1)+' m/bộ','Inverter → MSB/tủ hòa lưới'],
+    ['Tiết diện cáp AC (tự chọn)','≤10kWp→4mm² | ≤25→6 | ≤50→10 | ≤100→16 | ≤250→35 | >250→50','= '+cableAC_mm_d+' mm²','Theo IEC 60228, tổn thất <1%'],
+    [''],
+    ['C6. THIẾT BỊ BẢO VỆ (BOS)'],
+    ['Thiết bị','Công thức số lượng','Thông số','Tiêu chuẩn'],
+    ['MCB DC String','= numStrings (1 MCB/string)','15A, 1000VDC','IEC 60947-2'],
+    ['MCB AC chính','= numInv (1 bộ/inverter)','cap≤10→32A | ≤50→63A | ≤100→100A | >100→200A, 4P','IEC 60947-2'],
+    ['SPD DC + AC','= numInv (1 bộ/inverter)','Class II DC + Type 2 AC','IEC 62305-3'],
+    ['RCBO 30mA','1 cái','63A/30mA','TCVN 9207:2012'],
+    [''],
+    ['C7. BATTERY (Hybrid/Off-Grid)'],
+    ['Tham số','Công thức','Hybrid','Off-Grid'],
+    ['Dung lượng (kWh)','Hybrid: actualKwp×0.3×4h/0.9 | Off-Grid: daily_kWh×1.5/DOD80%',
+      sysType_d==='hybrid'?Math.max(Math.round(actualCap_d*0.3*4/0.9),5)+'kWh':'N/A',
+      sysType_d==='offgrid'?Math.round(actualCap_d*4.5*0.8*1.5/0.8)+'kWh':'N/A'],
+    ['Số module LFP 5.12kWh','= CEIL(batKwh / 5.12)','Tính theo dung lượng',''],
+    ['DOD thực dụng','LFP: 80% | Lead-acid: 50%','Năng lượng khả dụng = Bat_kWh × 0.8',''],
+    ['Ghi chú LFP','Tuổi thọ 3000-6000 chu kỳ | An toàn nhiệt | Phù hợp khí hậu VN','',''],
+  ];
+  var ws3=XLSX.utils.aoa_to_sheet(s3);
+  ws3['!cols']=[{wch:35},{wch:55},{wch:22},{wch:35}];
+  XLSX.utils.book_append_sheet(wb,ws3,'3. Công thức thiết kế');
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // SHEET 4: DÒNG TIỀN 25 NĂM — XÁC MINH
+  // ══════════════════════════════════════════════════════════════════════════
+  var res2=buildFlows(CAPEX,eqInvest,{
+    cap:cap,psh:psh,pr:gv('pr'),orient:fOrient,tiltf:fTilt,deg:gv('deg'),
+    self:gv('selfUse'),ep:ep,fitMode:fitMode,fitP:fitP,esc:gv('esc'),
+    maint:maint,annIns:annIns,invRep:invRep,invCost:invCost,
+    lifespan:lifespan,useLoan:useLoan,loanAmt:loanAmt,loanRate:gv('loanRate'),
+    loanTerm:nLoan,deprYr:deprYr,cit:gv('cit'),co2f:co2f
+  });
+  var eqF2=res2.eqFlows;
+  var irr2=calcIRR(eqF2);
+  var npv2=calcNPV(eqF2,wacc);
+
+  var s4=[
+    ['═══ D. DÒNG TIỀN CHI TIẾT — XÁC MINH CÔNG THỨC ═══'],[''],
+    ['Năm','E(y) kWh','EP(y) đ/kWh','Rev(y) tr.đ','C_om(y) tr.đ','Depr(y) tr.đ','EBIT(y) tr.đ',
+     'Tax(y) tr.đ','PMT tr.đ','CF ròng tr.đ','CUM tích lũy tr.đ',
+     'CF chiết khấu tr.đ','CUM chiết khấu tr.đ','CO₂ tấn'],
+  ];
+  var cumEq2=eqF2[0];
+  var cumDisc2=eqF2[0];
+  var loanBal2=loanAmt;
+  var annPMT2=useLoan&&rLoan>0?loanAmt*rLoan*Math.pow(1+rLoan,nLoan)/(Math.pow(1+rLoan,nLoan)-1):0;
+  s4.push([0,'-','-','-','-','-','-','-','-',
+    Math.round(eqF2[0]/1e6*10)/10,
+    Math.round(cumEq2/1e6*10)/10,
+    Math.round(eqF2[0]/1e6*10)/10,
+    Math.round(cumDisc2/1e6*10)/10,'-']);
+  for(var y=1;y<=lifespan;y++){
+    var kwh_y=cap*psh*365*pr*fOrient*fTilt*Math.pow(1-deg,y-1);
+    var ep_y=ep*Math.pow(1+esc,y-1);
+    var rev_y=kwh_y*ep_y; // net metering simplification
+    if(fitMode==='fit')rev_y=kwh_y*(self*ep_y+(1-self)*fitP*Math.pow(1+esc,y-1));
+    else if(fitMode==='netmeter')rev_y=kwh_y*ep_y;
+    else if(fitMode==='spot')rev_y=kwh_y*(self*ep_y+(1-self)*(fitP||ep_y*0.5)*Math.pow(1+esc,y-1));
+    else rev_y=kwh_y*self*ep_y;
+    var om_y=maint+annIns+(invRep>0&&y===invRep?invCost:0);
+    var depr_y=y<=deprYr?CAPEX/deprYr:0;
+    var ebit_y=rev_y-om_y-depr_y;
+    var tax_y=(cit>0&&ebit_y>0)?ebit_y*cit:0;
+    var debt_y=0;
+    if(useLoan&&y<=nLoan){
+      var int_y=loanBal2*rLoan;
+      var prin_y=annPMT2-int_y;
+      loanBal2=Math.max(0,loanBal2-prin_y);
+      debt_y=annPMT2;
+    }
+    var cf_y=rev_y-om_y-tax_y-debt_y;
+    cumEq2+=cf_y;
+    var cfd_y=cf_y/Math.pow(1+wacc,y);
+    cumDisc2+=cfd_y;
+    var co2_y=kwh_y*co2f/1000;
+    s4.push([y,Math.round(kwh_y),Math.round(ep_y),
+      Math.round(rev_y/1e6*10)/10,Math.round(om_y/1e6*10)/10,
+      Math.round(depr_y/1e6*10)/10,Math.round(ebit_y/1e6*10)/10,
+      Math.round(tax_y/1e6*10)/10,Math.round(debt_y/1e6*10)/10,
+      Math.round(cf_y/1e6*10)/10,Math.round(cumEq2/1e6*10)/10,
+      Math.round(cfd_y/1e6*10)/10,Math.round(cumDisc2/1e6*10)/10,
+      Math.round(co2_y*100)/100]);
+  }
+  s4.push(['']);
+  s4.push(['KẾT QUẢ TỔNG HỢP']);
+  s4.push(['CAPEX',Math.round(CAPEX/1e6*10)/10,'triệu VNĐ']);
+  s4.push(['Vốn tự có',Math.round(eqInvest/1e6*10)/10,'triệu VNĐ']);
+  s4.push(['IRR vốn tự có',(irr2&&irr2>-0.9)?(irr2*100).toFixed(2)+'%':'N/A','']);
+  s4.push(['NPV (WACC='+Math.round(wacc*100)+'%)',(npv2/1e6).toFixed(1),'triệu VNĐ']);
+  s4.push(['LCOE',Math.round((CAPEX+lifespan*(maint+annIns))/(res2.annData.reduce(function(s,d){return s+d.kwh;},0)||1)),'đ/kWh']);
+  s4.push(['CO₂ tổng',Math.round(res2.totalCo2),'tấn CO₂']);
+  s4.push(['Giá trị tín chỉ carbon',Math.round(res2.totalCo2*carbonP*fx/1e6*10)/10,'triệu VNĐ']);
+
+  var ws4=XLSX.utils.aoa_to_sheet(s4);
+  ws4['!cols']=[{wch:7},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:10},{wch:10},{wch:12},{wch:14},{wch:14},{wch:16},{wch:10}];
+  XLSX.utils.book_append_sheet(wb,ws4,'4. Dòng tiền xác minh');
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // SHEET 5: KIỂM TRA LOGIC THIẾT KẾ
+  // ══════════════════════════════════════════════════════════════════════════
+  var testCases=[
+    ['═══ E. KIỂM TRA LOGIC THIẾT KẾ — CÁC TRƯỜNG HỢP TEST ═══'],
+    ['kWp','Wp/tấm','Số tấm (công thức)','kWp thực tế','m²/tấm','Diện tích tấm','Diện tích mái','Tấm/string','Số string','Inverter (string)','Cáp DC (m, dist=15m)','DC/AC'],
+  ];
+  var testKwps=[3,5,10,20,30,50,100,200,500,1000];
+  var testWps=[400,445,500,665];
+  testWps.forEach(function(wp){
+    testCases.push(['--- Wp = '+wp+' ---']);
+    testKwps.forEach(function(kw){
+      var np=Math.ceil(Math.ceil(kw*1000/wp)/2)*2;
+      var ac=(np*wp)/1000;
+      var m2=wp<=400?1.96:(wp<=500?2.15:(wp<=650?2.56:2.90));
+      var pa=np*m2;
+      var ra=pa*1.25;
+      var pps2=wp<=400?18:(wp<=500?16:(wp<=650?14:12));
+      var ns=Math.ceil(np/pps2);
+      var ni,iu;
+      if(kw<=5){ni=1;iu=5;}else if(kw<=10){ni=1;iu=10;}else if(kw<=15){ni=1;iu=15;}
+      else if(kw<=20){ni=2;iu=10;}else if(kw<=30){ni=2;iu=15;}else if(kw<=50){ni=2;iu=25;}
+      else if(kw<=100){ni=Math.ceil(kw/50);iu=50;}else if(kw<=500){ni=Math.ceil(kw/100);iu=100;}
+      else{ni=Math.ceil(kw/250);iu=250;}
+      var cd=Math.round(ns*2*15*1.1);
+      var dcac=ac/(ni*iu);
+      testCases.push([kw,wp,np,ac.toFixed(3),m2,pa.toFixed(1),ra.toFixed(1),pps2,ns,ni+'×'+iu+'kW',cd+'m',(dcac).toFixed(3)]);
+    });
+  });
+  var ws5=XLSX.utils.aoa_to_sheet(testCases);
+  ws5['!cols']=[{wch:8},{wch:8},{wch:16},{wch:12},{wch:8},{wch:14},{wch:14},{wch:10},{wch:10},{wch:16},{wch:14},{wch:8}];
+  XLSX.utils.book_append_sheet(wb,ws5,'5. Kiểm tra logic thiết kế');
+
+  var now=new Date();
+  var ts=now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+''+String(now.getDate()).padStart(2,'0');
+  XLSX.writeFile(wb,'GITT_Solar_FormulasCheck_'+ts+'.xlsx');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+liveTotal();
+buildGloList();
+
+</script>
+</body>
+</html>
